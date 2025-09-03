@@ -11,6 +11,9 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
+      - name: Disable Jekyll
+        run: touch public/.nojekyll
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -30,5 +33,5 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
+          publish_branch: master
           publish_dir: ./public
