@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://newhigen.github.com/tech/sitemap.xml
+Sitemap: https://newhigen.github.io/tech/sitemap.xml
