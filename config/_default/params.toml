@@ -1,5 +1,5 @@
 colorScheme = "blowfish"
-defaultAppearance = "dark"
+defaultAppearance = "light"
 autoSwitchAppearance = true
 enableA11y = false
 enableSearch = true
