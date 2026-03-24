@@ -35,6 +35,9 @@ node_modules/
 ### Bun ###
 bun.lock
 
+### pnpm ###
+pnpm-lock.yaml
+
 ### Custom ###
 .DS_Store
 old_blog
