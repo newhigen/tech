@@ -4,6 +4,8 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import Substats from '@/components/about/Substats.astro'
 import ToolSection from '@/components/about/ToolSection.astro'
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 const headings = [
   { depth: 2, slug: 'hobbies', text: 'Hobbies' },
   { depth: 2, slug: 'tools', text: 'Tools' },
@@ -23,7 +25,7 @@ const headings = [
   <p>
     Motto: Stay hungry, Stay foolish. <Spoiler>这里可以夹私货，比如为什么要演奏春日影！</Spoiler>
   </p>
-  <Button title='Sponsor Me' class='w-fit' href='/projects#sponsorship' variant='ahead' />
+  <Button title='Sponsor Me' class='w-fit' href={`${base}/projects#sponsorship`} variant='ahead' />
 
   {/* general-talk */}
   <h2 id='hobbies'>Hobbies</h2>

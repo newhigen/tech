@@ -4,6 +4,8 @@ import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ, terms } from '@/site-config'
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 const meta = {
   title: 'Site policy',
   description: 'Site policy documentation'
@@ -11,7 +13,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title='Back' href={`${base}/`} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>Site Policy</h1>

@@ -28,6 +28,8 @@ interface Props {
 
 const { page, uniqueTags, collectionsCount } = Astro.props
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 const meta = {
   description: 'Some posts or archives of my blog',
   title: 'Blog'
@@ -50,7 +52,7 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/' variant='back' />
+  <Button title='Back' href={`${base}/`} variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
@@ -66,7 +68,7 @@ const paginationProps = {
               <span class='text-muted-foreground'>
                 Page {page.currentPage} - Showing {page.data.length} of {collectionsCount} posts
               </span>
-              <a aria-label='View all blog by years' href='/archives' data-astro-prefetch>
+              <a aria-label='View all blog by years' href={`${base}/archives`} data-astro-prefetch>
                 View all posts by years →
               </a>
             </div>
@@ -91,13 +93,13 @@ const paginationProps = {
                   // Only show top 50 tags in sidebar
                   uniqueTags.slice(0, 50).map((tag) => (
                     <li>
-                      <Button title={tag} href={`/tags/${tag}`} variant='pill' />
+                      <Button title={tag} href={`${base}/tags/${tag}`} variant='pill' />
                     </li>
                   ))
                 }
               </ul>
               <span class='mt-4 block sm:text-end'>
-                <a aria-label='View all blog categories' href='/tags' data-astro-prefetch>
+                <a aria-label='View all blog categories' href={`${base}/tags`} data-astro-prefetch>
                   View all →
                 </a>
               </span>

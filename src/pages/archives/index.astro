@@ -4,6 +4,8 @@ import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from 'astro-p
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 export const prerender = true
 
 const allPosts = await getBlogCollection()
@@ -17,7 +19,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' variant='back' />
+  <Button title='Back' href={`${base}/blog`} variant='back' />
 
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
