@@ -116,7 +116,7 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
   )}
 
   <!-- Default favicon (will be updated by JavaScript) -->
-  <link rel="icon" href="/favicon.png" />
+  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.png`} />
 
   <!-- Command Palette Config for Client Script -->
   <meta name="command-palette-shortcut" content={siteConfig.commandPalette.shortcut || ''}>
@@ -383,21 +383,22 @@ const scrollbarClass = siteConfig.hideScrollBar ? '' : 'show-scrollbars';
       
       let faviconUrl;
       
+      const base = import.meta.env.BASE_URL;
       if (faviconThemeAdaptive) {
         // Use theme-based favicons based on browser preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
 
         if (prefersDark) {
-          faviconUrl = '/favicon-dark.png';
+          faviconUrl = `${base}favicon-dark.png`;
         } else if (prefersLight) {
-          faviconUrl = '/favicon-light.png';
+          faviconUrl = `${base}favicon-light.png`;
         } else {
-          faviconUrl = '/favicon.png';
+          faviconUrl = `${base}favicon.png`;
         }
       } else {
         // Always use static favicon
-        faviconUrl = '/favicon.png';
+        faviconUrl = `${base}favicon.png`;
       }
 
       // Remove ALL existing favicon links

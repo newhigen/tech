@@ -114,7 +114,7 @@ const pagination = {
           </h1>
           <div class="flex items-center space-x-2">
             <a 
-              href="/rss.xml"
+              href={`${import.meta.env.BASE_URL}rss.xml`}
               class="inline-flex items-center px-3 py-2 text-sm font-medium text-highlight-600 dark:text-highlight-400 bg-highlight-50 dark:bg-highlight-900/20 rounded-lg border border-highlight-200 dark:border-highlight-700 hover:bg-highlight-100 dark:hover:bg-highlight-900/40 hover:text-highlight-700 dark:hover:text-highlight-300 transition-all duration-200"
               title="Subscribe to RSS feed"
               data-no-swup
@@ -123,7 +123,7 @@ const pagination = {
               RSS Feed
             </a>
             <a 
-              href="/feed.xml"
+              href={`${import.meta.env.BASE_URL}feed.xml`}
               class="inline-flex items-center px-3 py-2 text-sm font-medium text-highlight-600 dark:text-highlight-400 bg-highlight-50 dark:bg-highlight-900/20 rounded-lg border border-highlight-200 dark:border-highlight-700 hover:bg-highlight-100 dark:hover:bg-highlight-900/40 hover:text-highlight-700 dark:hover:text-highlight-300 transition-all duration-200"
               title="Subscribe to Atom feed"
               data-no-swup
@@ -142,7 +142,7 @@ const pagination = {
 
         <div class="mt-4">
           <a 
-            href="/posts"
+            href={`${import.meta.env.BASE_URL}posts`}
             class="inline-flex items-center text-sm text-primary-600 dark:text-primary-300 hover:text-primary-800 dark:hover:text-primary-200 transition-colors"
           >
             <Icon name="arrow-left" class="w-4 h-4 mr-1" />
@@ -175,7 +175,7 @@ const pagination = {
               </h2>
               <p class="text-primary-600 dark:text-primary-300 mb-8 max-w-md mx-auto">
                 There are no posts tagged with "{tag}". Try browsing other tags or 
-                <a href="/posts" class="text-primary-600 dark:text-primary-300 hover:underline">view all posts</a>.
+                <a href={`${import.meta.env.BASE_URL}posts`} class="text-primary-600 dark:text-primary-300 hover:underline">view all posts</a>.
               </p>
             </div>
           )}
