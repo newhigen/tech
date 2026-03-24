@@ -20,24 +20,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: latest
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
+          cache: npm
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
       - name: Build
-        run: pnpm build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
