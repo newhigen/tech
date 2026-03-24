@@ -183,7 +183,7 @@ image: {
     }
   },
   vite: {
-    assetsInclude: ['**/*.base', '**/*.home', '**/*.base'],
+    assetsInclude: ['**/*.base', '**/*.home', '**/_redirects', '**/_headers'],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -218,7 +218,7 @@ image: {
     optimizeDeps: {
       exclude: ['astro:content']
     },
-    exclude: ['**/_redirects']
+    exclude: ['**/_redirects', '**/_headers']
   },
   build: {
     assets: '_assets'
