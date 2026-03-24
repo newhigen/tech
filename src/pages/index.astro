@@ -11,6 +11,8 @@ import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import config from '@/site-config'
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 const languages = ['Html', 'JavaScript', 'CSS', 'Shell']
 const frontend = ['TypeScript', 'Vite', 'Webpack', 'Astro']
 const backend = ['Vercel', 'Waline']
@@ -81,7 +83,7 @@ if (!images[imagePath])
           indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel,
           at eum oratio possit voluptatum.
         </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+        <Button title='More about me' class='w-fit self-end' href={`${base}/about`} variant='ahead' />
       </Section>
       {
         allPostsByDate.length > 0 && (
@@ -93,7 +95,7 @@ if (!images[imagePath])
                 </li>
               ))}
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+            <Button title='More posts' class='w-fit self-end' href={`${base}/blog`} variant='ahead' />
           </Section>
         )
       }
@@ -168,7 +170,7 @@ if (!images[imagePath])
             imagePath='/src/assets/projects/3.avif'
           />
           <ProjectCard
-            href='/projects'
+            href={`${base}/projects`}
             heading='More projects'
             subheading='Check out more projects'
             imagePath='/src/assets/projects/4.avif'
