@@ -38,8 +38,6 @@ jobs:
 
       - name: Build
         run: pnpm build
-        env:
-          DEPLOYMENT_PLATFORM: github-pages
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

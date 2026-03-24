@@ -1,133 +1,83 @@
-import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
-import { siteConfig } from "../config";
-import { shouldShowPost, sortPostsByDate } from "../utils/markdown";
-import { optimizePostImagePath } from "../utils/images";
+import type { AstroGlobal, ImageMetadata } from 'astro'
+import { getImage } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+import rss from '@astrojs/rss'
+import type { Root } from 'mdast'
+import rehypeStringify from 'rehype-stringify'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
+import { visit } from 'unist-util-visit'
 
-// Helper function to extract image path from Obsidian bracket syntax
-function extractImagePath(image: string): string {
-  if (!image || typeof image !== "string") return "";
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import config from 'virtual:config'
 
-  // Handle Obsidian bracket syntax: [[path/to/image.jpg]] (unquoted)
-  if (image.startsWith("[[") && image.endsWith("]]")) {
-    return image.slice(2, -2); // Remove [[ and ]]
+// Get dynamic import of images as a map collection
+const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/content/blog/**/*.{jpeg,jpg,png,gif,avif,webp}' // add more image formats if needed
+)
+
+const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
+  // Replace image links with the correct path
+  function remarkReplaceImageLink() {
+    /**
+     * @param {Root} tree
+     */
+    return async (tree: Root) => {
+      const promises: Promise<void>[] = []
+      visit(tree, 'image', (node) => {
+        if (node.url.startsWith('/images')) {
+          node.url = `${site}${node.url.replace('/', '')}`
+        } else {
+          const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
+          const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
+            const imagePath = res?.default
+            if (imagePath) {
+              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
+            }
+          })
+          if (promise) promises.push(promise)
+        }
+      })
+      await Promise.all(promises)
+    }
   }
 
-  // Handle quoted Obsidian bracket syntax: "[[path/to/image.jpg]]"
-  if (image.startsWith('"[[') && image.endsWith(']]"')) {
-    return image.slice(3, -3); // Remove "[[ and ]]"
-  }
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkReplaceImageLink)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(post.body)
 
-  // Return as-is for regular paths
-  return image;
+  return String(file)
 }
 
-function getMimeTypeFromPath(path: string): string {
-  const ext = path.split(".").pop()?.toLowerCase();
-  switch (ext) {
-    case "jpg":
-    case "jpeg":
-      return "image/jpeg";
-    case "png":
-      return "image/png";
-    case "gif":
-      return "image/gif";
-    case "webp":
-      return "image/webp";
-    default:
-      // Default to WebP since sync-images.js converts images to WebP
-      return "image/webp";
-  }
-}
-
-// Helper function to normalize siteUrl - ensure it ends with a single slash
-function normalizeSiteUrl(url: string): string {
-  return url.replace(/\/+$/, '') + '/';
-}
-
-export async function GET() {
-  // Get all posts
-  const posts = await getCollection("posts");
-
-  // Filter and sort posts based on environment (in dev, show all including drafts)
-  const isDev = import.meta.env.DEV;
-  const visiblePosts = posts.filter(
-    (post) => shouldShowPost(post, isDev)
-  );
-  const sortedPosts = sortPostsByDate(visiblePosts);
-
-  const siteUrl = normalizeSiteUrl(import.meta.env.SITE || siteConfig.site);
+const GET = async (context: AstroGlobal) => {
+  const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
+  const siteUrl = context.site ?? new URL(import.meta.env.SITE)
 
   return rss({
-    title: siteConfig.title,
-    description: siteConfig.description,
-    site: siteUrl,
-    items: sortedPosts.map((post) => {
-      const postUrl = `${siteUrl}posts/${(post as any).id}/`;
+    // Basic configs
+    trailingSlash: false,
+    xmlns: { h: 'http://www.w3.org/TR/html4/' },
+    stylesheet: '/scripts/pretty-feed-v3.xsl',
 
-      return {
-        title: post.data.title,
-        description: post.data.description || "",
-        pubDate: post.data.date,
-        link: postUrl,
-        categories: post.data.tags || [],
-        author: siteConfig.author,
-        // Include image if available and marked for OG
-        enclosure:
-          post.data.image && post.data.imageOG
-            ? {
-                url: (() => {
-                  const imagePath = extractImagePath(post.data.image);
-                  if (typeof imagePath === "string" && imagePath.startsWith("http")) {
-                    return imagePath;
-                  }
-                  // Use optimizePostImagePath to handle folder-based posts and WebP conversion
-                  const optimizedPath = optimizePostImagePath(imagePath, (post as any).id, (post as any).id);
-                  // optimizedPath always starts with /, so remove it since siteUrl already ends with /
-                  return `${siteUrl}${optimizedPath.startsWith('/') ? optimizedPath.slice(1) : optimizedPath}`;
-                })(),
-                type: getMimeTypeFromPath(extractImagePath(post.data.image)),
-                length: 0, // Length is optional
-              }
-            : undefined,
-        customData: [
-          post.data.targetKeyword &&
-            `<keyword>${post.data.targetKeyword}</keyword>`,
-          post.data.image &&
-            `<image>${(() => {
-              const imagePath = extractImagePath(post.data.image);
-              if (typeof imagePath === "string" && imagePath.startsWith("http")) {
-                return imagePath;
-              }
-              // Use optimizePostImagePath to handle folder-based posts and WebP conversion
-              const optimizedPath = optimizePostImagePath(imagePath, (post as any).id, (post as any).id);
-              // optimizedPath always starts with /, so remove it since siteUrl already ends with /
-              return `${siteUrl}${optimizedPath.startsWith('/') ? optimizedPath.slice(1) : optimizedPath}`;
-            })()}</image>`,
-        ]
-          .filter(Boolean)
-          .join(""),
-      };
-    }),
-
-    // RSS 2.0 extensions
-    customData: `
-      <language>${siteConfig.language}</language>
-      <copyright>Copyright © ${new Date().getFullYear()} ${
-      siteConfig.author
-    }</copyright>
-      <managingEditor>${siteConfig.author}</managingEditor>
-      <webMaster>${siteConfig.author}</webMaster>
-      <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-      <generator>Astro RSS</generator>
-      <docs>https://www.rssboard.org/rss-specification</docs>
-      <ttl>60</ttl>
-    `,
-
-    xmlns: {
-      atom: "http://www.w3.org/2005/Atom",
-      content: "http://purl.org/rss/1.0/modules/content/",
-      dc: "http://purl.org/dc/elements/1.1/",
-    },
-  });
+    // Contents
+    title: config.title,
+    description: config.description,
+    site: import.meta.env.SITE,
+    items: await Promise.all(
+      allPostsByDate.map(async (post) => ({
+        pubDate: post.data.publishDate,
+        link: `/blog/${post.id}`,
+        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
+          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
+        content: await renderContent(post, siteUrl),
+        ...post.data
+      }))
+    )
+  })
 }
+
+export { GET }

@@ -1,37 +1,19 @@
-import type { APIRoute } from "astro";
-import { siteConfig } from "../config";
+import type { APIRoute } from 'astro'
 
-export const GET: APIRoute = async () => {
-  const siteUrl = import.meta.env.SITE || siteConfig.site;
+const robotsTxt = `
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-Web
 
-  const robotsTxt = `User-agent: *
+User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: ${siteUrl}sitemap.xml
+Sitemap: ${new URL('sitemap-index.xml', import.meta.env.SITE).href}
+`.trim()
 
-# RSS Feed
-# ${siteUrl}rss.xml
-
-# Disallow common non-content paths
-Disallow: /api/
-Disallow: /_astro/
-Disallow: /_image/
-Disallow: /admin/
-Disallow: /.well-known/
-
-# Allow search engines to crawl images
-Allow: /posts/attachments/
-Allow: /pages/attachments/
-
-# Crawl delay (optional)
-# Crawl-delay: 1
-`;
-
-  return new Response(robotsTxt, {
+export const GET: APIRoute = () =>
+  new Response(robotsTxt, {
     headers: {
-      "Content-Type": "text/plain",
-      "Cache-Control": "public, max-age=86400", // Cache for 24 hours
-    },
-  });
-};
+      'Content-Type': 'text/plain; charset=utf-8'
+    }
+  })
