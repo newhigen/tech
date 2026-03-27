@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  category?: string;
+}
+
+const { category } = Astro.props;
+
+// Get all blog posts and extract unique categories
+const allPosts = await getCollection('blog');
+const categories = [...new Set(allPosts.map(post => post.data.category))].sort();
+---
+
+<div class="sticky top-4">
+  <div class="space-y-6">
+    <div>
+      <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
+        Categories
+      </h3>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="/blog" class={`block py-1 px-2 rounded transition-colors ${!category ? 'bg-slate-100 dark:bg-slate-800 font-semibold' : 'hover:bg-slate-50 dark:hover:bg-slate-900'}`}>
+            All
+          </a>
+        </li>
+        {categories.map(cat => (
+          <li>
+            <a href={`/blog?category=${cat}`} class={`block py-1 px-2 rounded transition-colors ${category === cat ? 'bg-slate-100 dark:bg-slate-800 font-semibold' : 'hover:bg-slate-50 dark:hover:bg-slate-900'}`}>
+              {cat}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
+        Links
+      </h3>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="https://github.com" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
+            Twitter
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

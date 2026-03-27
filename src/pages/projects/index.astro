@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/project/ProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+---
+
+<BaseLayout title="Projects - newhigen" description="My projects and portfolio">
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold mb-8">Projects</h1>
+    <div class="space-y-4">
+      {allProjects.map(project => (
+        <ProjectCard
+          title={project.data.title}
+          slug={project.slug}
+          description={project.data.description}
+          link={project.data.link}
+          github={project.data.github}
+          tags={project.data.tags}
+        />
+      ))}
+    </div>
+    {allProjects.length === 0 && (
+      <p class="text-slate-600 dark:text-slate-400">No projects yet.</p>
+    )}
+  </div>
+</BaseLayout>

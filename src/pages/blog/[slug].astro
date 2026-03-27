@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+export async function getStaticPaths() {
+  const blogPosts = await getCollection('blog');
+  return blogPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const formattedDate = new Date(post.data.pubDate).toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedUpdatedDate = post.data.updatedDate
+  ? new Date(post.data.updatedDate).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+---
+
+<BlogLayout title={post.data.title} description={post.data.description} category={post.data.category}>
+  <div>
+    <header class="mb-8 pb-8 border-b border-slate-200 dark:border-slate-800">
+      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
+      <p class="text-slate-600 dark:text-slate-400 mb-3">
+        {formattedDate}
+        {formattedUpdatedDate && (
+          <>
+            {' '}· Updated {formattedUpdatedDate}
+          </>
+        )}
+      </p>
+      <div class="flex gap-2 flex-wrap">
+        {post.data.tags?.map((tag: string) => (
+          <span class="inline-block px-2 py-1 text-xs rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <article class="prose dark:prose-invert max-w-none">
+      <Content />
+    </article>
+  </div>
+</BlogLayout>

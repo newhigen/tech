@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Sidebar from '../components/layout/Sidebar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  category?: string;
+}
+
+const { title, description, category } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="flex max-w-6xl mx-auto px-4 py-8 gap-8">
+    <aside class="w-64 flex-shrink-0">
+      <Sidebar category={category} />
+    </aside>
+    <article class="flex-1 min-w-0">
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

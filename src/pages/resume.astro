@@ -1,0 +1,30 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="Resume" description="My resume">
+  <h2 class="text-2xl font-bold mt-8 mb-4">Experience</h2>
+  <div class="space-y-6 text-slate-700 dark:text-slate-300">
+    <div>
+      <h3 class="font-semibold">Software Developer</h3>
+      <p class="text-sm text-slate-600 dark:text-slate-400">Your Company · 2024 - Present</p>
+      <p class="mt-2">Description of your work and achievements</p>
+    </div>
+  </div>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Skills</h2>
+  <ul class="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
+    <li>JavaScript / TypeScript</li>
+    <li>React, Astro</li>
+    <li>Node.js</li>
+    <li>SQL</li>
+  </ul>
+
+  <h2 class="text-2xl font-bold mt-8 mb-4">Education</h2>
+  <div class="space-y-4 text-slate-700 dark:text-slate-300">
+    <div>
+      <h3 class="font-semibold">Bachelor of Science in Computer Science</h3>
+      <p class="text-sm text-slate-600 dark:text-slate-400">Your University · 2023</p>
+    </div>
+  </div>
+</PageLayout>
