@@ -13,7 +13,7 @@ const allProjects = await getCollection('projects');
       {allProjects.map(project => (
         <ProjectCard
           title={project.data.title}
-          slug={project.slug}
+          slug={project.id}
           description={project.data.description}
           link={project.data.link}
           github={project.data.github}

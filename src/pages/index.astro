@@ -27,7 +27,7 @@ const recentPosts = allPosts
         {recentPosts.map(post => (
           <PostCard
             title={post.data.title}
-            slug={post.slug}
+            slug={post.id}
             description={post.data.description}
             pubDate={post.data.pubDate}
             category={post.data.category}
