@@ -14,15 +14,15 @@
   </span>
 </button>
 
-<script>
-  const themeToggle = document.getElementById('theme-toggle');
-
-  themeToggle?.addEventListener('click', () => {
+<script is:inline>
+  function toggleTheme() {
     const html = document.documentElement;
     const isDark = html.classList.contains('dark');
     const newTheme = isDark ? 'light' : 'dark';
 
     html.classList.toggle('dark');
     localStorage.setItem('theme', newTheme);
-  });
+  }
+
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 </script>
