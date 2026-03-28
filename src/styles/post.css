@@ -162,11 +162,11 @@ article table {
     white-space: nowrap;
   }
 
-  article h1 { font-size: 1.375rem; }
-  article h2 { font-size: 1.125rem; }
-  article h3 { font-size: 1rem; }
-  article p, article ul, article ol { font-size: 0.875rem; }
-  article pre { font-size: 0.75rem; }
+  article h1 { font-size: 1.25rem; }
+  article h2 { font-size: 1rem; }
+  article h3 { font-size: 0.9375rem; }
+  article p, article ul, article ol { font-size: 0.8125rem; }
+  article pre { font-size: 0.6875rem; }
 }
 
 article th {
