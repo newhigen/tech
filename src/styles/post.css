@@ -116,8 +116,20 @@ article pre {
   font-size: 0.8125rem;
   line-height: 1.7;
   overflow-x: auto;
-  background-color: var(--code-bg) !important;
   border: 1px solid var(--border);
+}
+
+/* Shiki dual theme */
+article .astro-code,
+article .astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+
+html.dark article .astro-code,
+html.dark article .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 
 article code:not(pre code) {
