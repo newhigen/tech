@@ -1,5 +1,5 @@
 ---
-title: "Claude Code Subagents"
+title: "Subagent"
 description: Anthropic Subagents 강의 정리. 언제 쓰고, 어떻게 설계하고, 언제 피해야 하는지.
 pubDate: 2026-03-28
 category: Agent
