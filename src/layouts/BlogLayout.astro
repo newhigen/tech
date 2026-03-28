@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
 import TOC from '../components/blog/TOC.astro';
@@ -12,6 +13,17 @@ interface Props {
 
 const { title, description, currentSlug, headings = [] } = Astro.props;
 const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
+
+const allPosts = await getCollection('blog');
+const sorted = allPosts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
+  const cat = post.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(post);
+  return acc;
+}, {});
+const categories = Object.keys(grouped).sort();
+const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.data.category : null;
 ---
 
 <style>
@@ -41,6 +53,9 @@ const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
     width: 16rem;
     flex-shrink: 0;
   }
+  .mobile-cat-nav {
+    display: none;
+  }
 
   @media (max-width: 1024px) {
     .toc-aside, .toc-placeholder { display: none; }
@@ -48,15 +63,83 @@ const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
   }
 
   @media (max-width: 768px) {
-    .layout-wrapper { padding: 1.5rem 1.25rem; }
+    .layout-wrapper { padding: 1rem 0; }
     .sidebar-aside { display: none; }
-    .article-main { padding: 0; }
+    .article-main { padding: 0 1.25rem; }
+    .mobile-cat-nav { display: block; }
   }
+
+  /* mobile nav styles */
+  .cat-tabs {
+    display: flex;
+    gap: 0.375rem;
+    overflow-x: auto;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+
+  .cat-tab {
+    flex-shrink: 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+  }
+  .cat-tab.active, .cat-tab:hover {
+    background: var(--text-primary);
+    color: var(--bg);
+    border-color: var(--text-primary);
+  }
+
+  .cat-posts {
+    padding: 0.5rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-posts a {
+    display: block;
+    padding: 0.375rem 0;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-posts a:last-child { border-bottom: none; }
+  .cat-posts a.active-post { color: var(--text-primary); font-weight: 500; }
 </style>
 
 <BaseLayout title={title} description={description}>
-  <div class="layout-wrapper">
 
+  <!-- 모바일 카테고리 가로 스크롤 nav -->
+  <div class="mobile-cat-nav">
+    <div class="cat-tabs" id="cat-tabs">
+      {categories.map(cat => (
+        <button
+          class={`cat-tab${activeCategory === cat ? ' active' : ''}`}
+          data-cat={cat}
+        >{cat}</button>
+      ))}
+    </div>
+    <div id="cat-posts-panel" class="cat-posts" style="display: none;">
+      {categories.map(cat => (
+        <div data-cat-panel={cat} style="display: none;">
+          {grouped[cat].map(post => (
+            <a
+              href={`/${post.id}`}
+              class={currentSlug === post.id ? 'active-post' : ''}
+            >{post.data.title}</a>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="layout-wrapper">
     <aside class="sidebar-aside">
       <Sidebar currentSlug={currentSlug} />
     </aside>
@@ -72,6 +155,43 @@ const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
     ) : (
       <div class="toc-placeholder" />
     )}
-
   </div>
+
 </BaseLayout>
+
+<script is:inline>
+  function initMobileCatNav() {
+    const tabs = document.querySelectorAll('.cat-tab');
+    const panel = document.getElementById('cat-posts-panel');
+    if (!tabs.length || !panel) return;
+
+    let openCat = null;
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const cat = tab.getAttribute('data-cat');
+        if (openCat === cat) {
+          // 같은 탭 다시 누르면 닫기
+          panel.style.display = 'none';
+          tab.classList.remove('active');
+          openCat = null;
+          return;
+        }
+        // 모든 패널 숨기고 탭 비활성화
+        document.querySelectorAll('[data-cat-panel]').forEach(p => p.style.display = 'none');
+        document.querySelectorAll('.cat-tab').forEach(t => {
+          if (!t.classList.contains('active') || t !== tab) t.classList.remove('active');
+        });
+        // 선택한 카테고리 패널 열기
+        const catPanel = document.querySelector(`[data-cat-panel="${cat}"]`);
+        if (catPanel) {
+          catPanel.style.display = 'block';
+          panel.style.display = 'block';
+          tab.classList.add('active');
+          openCat = cat;
+        }
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initMobileCatNav);
+</script>
