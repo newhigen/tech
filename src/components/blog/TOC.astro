@@ -15,7 +15,7 @@ const filtered = headings.filter(h => h.depth >= 1 && h.depth <= 3);
 
 {filtered.length > 0 && (
   <nav class="toc">
-    <p class="toc-label">On this page</p>
+    <button class="toc-label" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
     <ul>
       {filtered.map(h => (
         <li>
@@ -41,6 +41,16 @@ const filtered = headings.filter(h => h.depth >= 1 && h.depth <= 3);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 0.625rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    transition: color 0.15s ease;
+  }
+
+  .toc-label:hover {
+    color: var(--text-primary);
   }
 
   ul {
