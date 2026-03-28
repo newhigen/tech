@@ -10,8 +10,8 @@ const sortedPosts = allPosts.sort(
 ---
 
 <BlogLayout title="Tech - newhigen">
-  <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 2rem;">Tech</h1>
-  <div>
+  <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 3rem;">Tech</h1>
+  <div class="post-list">
     {sortedPosts.map(post => (
       <PostCard
         title={post.data.title}

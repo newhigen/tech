@@ -3,7 +3,7 @@ title: "MacOS"
 description: 맥 개발 환경 앱과 브라우저 확장 모음
 pubDate: 2025-11-28
 category: Dev Environment
-tags: [macOS, 개발환경]
+tags: [macOS, DevEnv]
 ---
 
 ## Applications

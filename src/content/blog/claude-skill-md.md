@@ -3,20 +3,20 @@ title: "SKILL.md"
 description: SKILL.md로 Claude Code에 task-specific 전문성을 추가하는 방법과 CLAUDE.md와의 차이
 pubDate: 2026-03-25
 category: Agent
-tags: [claude, skill, automation]
+tags: [Claude]
 ---
 
 SKILL.md는 Claude Code에 task-specific 전문성을 추가하는 방법이다. CLAUDE.md가 모든 대화에 로딩되는 반면, SKILL.md는 name과 description만 context window에 들어가고 필요할 때 on-demand로 로딩된다.
 
 ## CLAUDE.md vs. SKILL.md vs. Subagents vs. Hooks
 
-| | 설명 |
-|---|---|
+|             | 설명                                                         |
+| ----------- | ------------------------------------------------------------ |
 | `CLAUDE.md` | 모든 대화에 로딩 — always-on 프로젝트 표준, 제약, 프레임워크 |
-| `SKILL.md` | 필요할 때 로딩 — task-specific 전문성 |
-| Subagents | isolated execution context — 위임된 작업 실행 |
-| Hooks | event-driven |
-| MCP servers | 외부 툴 및 인테그레이션 |
+| `SKILL.md`  | 필요할 때 로딩 — task-specific 전문성                        |
+| Subagents   | isolated execution context — 위임된 작업 실행                |
+| Hooks       | event-driven                                                 |
+| MCP servers | 외부 툴 및 인테그레이션                                      |
 
 ## 파일 구조
 

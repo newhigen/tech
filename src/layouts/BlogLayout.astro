@@ -30,7 +30,7 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
   .layout-wrapper {
     max-width: 90rem;
     margin: 0 auto;
-    padding: 2.5rem 2rem;
+    padding: 1.25rem 2rem;
     display: flex;
     gap: 0;
   }
@@ -93,12 +93,7 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
   <!-- 모바일 드로워 트리거 -->
   <div class="drawer-trigger">
     <button id="drawer-open" aria-label="Open navigation" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 0; display: flex; align-items: center; gap: 0.375rem;">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <line x1="2" y1="4" x2="14" y2="4"/>
-        <line x1="2" y1="8" x2="14" y2="8"/>
-        <line x1="2" y1="12" x2="14" y2="12"/>
-      </svg>
-      <span style="font-size: 0.75rem; color: var(--text-tertiary);">{activeCategory ?? 'Categories'}</span>
+      <span style="font-size: 0.75rem; color: var(--text-tertiary);"><span style="font-size: 1rem;">›</span>{' ' + (activeCategory ?? 'Categories')}</span>
     </button>
   </div>
 

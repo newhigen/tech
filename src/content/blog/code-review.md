@@ -3,7 +3,7 @@ title: "효과적인 코드 리뷰란"
 description: 코드 리뷰의 본질과 리뷰어·작성자 각각의 역할에 대한 경험 기반 정리
 pubDate: 2025-11-30
 category: Software Engineering
-tags: [코드리뷰, 협업]
+tags: [CodeReview, Collaboration]
 ---
 
 ## 코드 리뷰의 본질에 대한 탐구
@@ -63,7 +63,7 @@ tags: [코드리뷰, 협업]
 ### 자료
 
 - LINE - [효과적인 코드 리뷰를 위해서](https://engineering.linecorp.com/ko/blog/effective-codereview)
-- Kakao - [효과적인 코드리뷰를 위한 리뷰어의 자세](https://tech.kakao.com/posts/498) / [재택근무 환경에서 효율적인 코드 리뷰 방법: 팀 그라운드 룰 정하기](https://tech.kakaopay.com/post/remote-work-code-review/)
+- Kakao - [효과적인 CodeReview를 위한 리뷰어의 자세](https://tech.kakao.com/posts/498) / [재택근무 환경에서 효율적인 코드 리뷰 방법: 팀 그라운드 룰 정하기](https://tech.kakaopay.com/post/remote-work-code-review/)
 - 삼성SDS - [글로벌기업은 코드 리뷰를 어떻게 할까요?](https://www.samsungsds.com/kr/insights/global_code_review.html)
 - 뱅크샐러드 - [코드 리뷰 in 뱅크샐러드 개발 문화](https://blog.banksalad.com/tech/banksalad-code-review-culture/)
 - Etc. - [코드 리뷰가 개발 문화에 미치는 영향](https://yozm.wishket.com/magazine/detail/1957/)
