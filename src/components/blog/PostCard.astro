@@ -6,9 +6,10 @@ interface Props {
   pubDate: Date;
   category: string;
   tags?: string[];
+  compact?: boolean;
 }
 
-const { title, slug, description, pubDate, category } = Astro.props;
+const { title, slug, description, pubDate, category, compact = false } = Astro.props;
 
 function formatDate(date: Date): string {
   const dow = '일월화수목금토'[date.getDay()];
@@ -31,19 +32,30 @@ const formattedDate = formatDate(new Date(pubDate));
   }
 </style>
 
-<article style="padding: 0.625rem 0; border-bottom: 1px solid var(--border);">
-  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.2rem;">
-    <a href={`/${slug}`} class="post-title" style="font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+{compact ? (
+  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: 0.35rem 0; border-bottom: 1px solid var(--border);">
+    <a href={`/${slug}`} class="post-title" style="font-size: 0.875rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
       {title}
     </a>
     <span style="font-size: 0.75rem; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0;">
       {formattedDate}
     </span>
   </div>
-  <div style="display: flex; align-items: baseline; gap: 0.75rem;">
-    <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0;">{category}</span>
-    <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-      {description}
-    </p>
-  </div>
-</article>
+) : (
+  <article style="padding: 0.625rem 0; border-bottom: 1px solid var(--border);">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.2rem;">
+      <a href={`/${slug}`} class="post-title" style="font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        {title}
+      </a>
+      <span style="font-size: 0.75rem; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0;">
+        {formattedDate}
+      </span>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 0.75rem;">
+      <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap; flex-shrink: 0;">{category}</span>
+      <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+        {description}
+      </p>
+    </div>
+  </article>
+)}
