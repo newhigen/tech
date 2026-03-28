@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { headings } = Astro.props;
-const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+const filtered = headings.filter(h => h.depth >= 1 && h.depth <= 3);
 ---
 
 {filtered.length > 0 && (
@@ -63,8 +63,16 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     padding-left: 0.625rem;
   }
 
-  .toc-link.depth-3 {
+  .toc-link.depth-1 {
+    font-weight: 500;
+  }
+
+  .toc-link.depth-2 {
     padding-left: 1.25rem;
+  }
+
+  .toc-link.depth-3 {
+    padding-left: 2rem;
     font-size: 0.75rem;
   }
 
