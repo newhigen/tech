@@ -154,6 +154,21 @@ article table {
   color: var(--text-secondary);
 }
 
+@media (max-width: 768px) {
+  article table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  article h1 { font-size: 1.375rem; }
+  article h2 { font-size: 1.125rem; }
+  article h3 { font-size: 1rem; }
+  article p, article ul, article ol { font-size: 0.875rem; }
+  article pre { font-size: 0.75rem; }
+}
+
 article th {
   text-align: left;
   font-weight: 600;
