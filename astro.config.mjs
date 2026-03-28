@@ -11,4 +11,13 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [mdx()],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      defaultColor: false,
+    },
+  },
 });
