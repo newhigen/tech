@@ -5,5 +5,5 @@
       text { fill: #eee; }
     }
   </style>
-  <text x="16" y="26" text-anchor="middle" font-size="26" font-family="Georgia, serif">¶</text>
+  <text x="16" y="26" text-anchor="middle" font-size="26" font-family="Georgia, serif">⌥</text>
 </svg>
