@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
 import TOC from '../components/blog/TOC.astro';
@@ -12,29 +13,137 @@ interface Props {
 
 const { title, description, currentSlug, headings = [] } = Astro.props;
 const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
+
+const allPosts = await getCollection('blog');
+const sorted = allPosts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
+  const cat = post.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(post);
+  return acc;
+}, {});
+const categories = Object.keys(grouped).sort();
+const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.data.category : null;
 ---
 
-<BaseLayout title={title} description={description}>
-  <div style="max-width: 90rem; margin: 0 auto; padding: 2.5rem 2rem; display: flex; gap: 0;">
+<style>
+  .layout-wrapper {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    display: flex;
+    gap: 0;
+  }
+  .sidebar-aside {
+    width: 13rem;
+    flex-shrink: 0;
+    padding-right: 1rem;
+  }
+  .article-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0 2rem;
+  }
+  .toc-aside {
+    width: 16rem;
+    flex-shrink: 0;
+    padding-left: 2rem;
+  }
+  .toc-placeholder {
+    width: 16rem;
+    flex-shrink: 0;
+  }
 
-    <!-- 왼쪽 nav: 18rem 고정 -->
-    <aside style="width: 13rem; flex-shrink: 0; padding-right: 1rem;">
+  @media (max-width: 1024px) {
+    .toc-aside, .toc-placeholder { display: none; }
+    .article-main { padding: 0 1rem; }
+  }
+
+  @media (max-width: 768px) {
+    .layout-wrapper { padding: 1rem 0; }
+    .sidebar-aside { display: none; }
+    .article-main { padding: 0 1.25rem; }
+  }
+</style>
+
+<BaseLayout title={title} description={description}>
+
+  <!-- 드로워 오버레이 -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+  <!-- 드로워 패널 -->
+  <div class="drawer-panel" id="drawer-panel">
+    <div class="drawer-header">
+      <span class="drawer-title">Categories</span>
+      <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
+    </div>
+    {categories.map(cat => (
+      <div class="drawer-cat">
+        <div class={`drawer-cat-label${activeCategory === cat ? ' active-cat' : ''}`}>{cat}</div>
+        {grouped[cat].map(post => (
+          <a
+            href={`/${post.id}`}
+            class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
+          >{post.data.title}</a>
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <!-- 모바일 드로워 트리거 -->
+  <div class="drawer-trigger">
+    <button id="drawer-open" aria-label="Open navigation" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 0; display: flex; align-items: center; gap: 0.375rem;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="2" y1="4" x2="14" y2="4"/>
+        <line x1="2" y1="8" x2="14" y2="8"/>
+        <line x1="2" y1="12" x2="14" y2="12"/>
+      </svg>
+      <span style="font-size: 0.75rem; color: var(--text-tertiary);">{activeCategory ?? 'Categories'}</span>
+    </button>
+  </div>
+
+  <div class="layout-wrapper">
+    <aside class="sidebar-aside">
       <Sidebar currentSlug={currentSlug} />
     </aside>
 
-    <!-- 본문 -->
-    <article style="flex: 1; min-width: 0; padding: 0 2rem;">
+    <article class="article-main">
       <slot />
     </article>
 
-    <!-- 오른쪽 TOC: 16rem 고정, 없으면 자리 차지 안 함 -->
     {hasTOC ? (
-      <aside style="width: 16rem; flex-shrink: 0; padding-left: 2rem;">
+      <aside class="toc-aside">
         <TOC headings={headings} />
       </aside>
     ) : (
-      <div style="width: 16rem; flex-shrink: 0;" />
+      <div class="toc-placeholder" />
     )}
-
   </div>
+
 </BaseLayout>
+
+<script is:inline>
+  function initDrawer() {
+    const openBtn = document.getElementById('drawer-open');
+    const closeBtn = document.getElementById('drawer-close');
+    const overlay = document.getElementById('drawer-overlay');
+    const panel = document.getElementById('drawer-panel');
+    if (!openBtn || !closeBtn || !overlay || !panel) return;
+
+    function openDrawer() {
+      panel.classList.add('open');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      panel.classList.remove('open');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+  }
+  document.addEventListener('astro:page-load', initDrawer);
+</script>
