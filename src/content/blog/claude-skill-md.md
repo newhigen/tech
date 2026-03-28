@@ -1,5 +1,5 @@
 ---
-title: "SKILL.md: Claude Code에 커스텀 스킬 추가하기"
+title: "SKILL.md"
 description: SKILL.md로 Claude Code에 task-specific 전문성을 추가하는 방법과 CLAUDE.md와의 차이
 pubDate: 2024-03-27
 category: Agent
