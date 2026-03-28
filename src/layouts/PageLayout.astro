@@ -10,7 +10,7 @@ const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div style="max-width: 52rem; margin: 0 auto; padding: 3rem 2rem;">
+  <div class="page-container" style="max-width: 52rem; margin: 0 auto; padding: 3rem 2rem;">
     <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 2rem;">{title}</h1>
     <div style="color: var(--text-primary);">
       <slot />
