@@ -69,6 +69,25 @@ button {
   transition: color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
 }
 
+/* === Post list hover effect === */
+@media (hover: hover) and (pointer: fine) {
+  .post-list .post-title,
+  .post-list .compact-title {
+    transition: opacity 0.35s ease;
+  }
+  .post-list:hover .post-title,
+  .post-list:hover .compact-title {
+    opacity: 0.35;
+  }
+  .post-list:hover .post-title:hover,
+  .post-list:hover .compact-title:hover {
+    opacity: 1;
+  }
+}
+
+/* === Stale cache guard: ClientRouter may restore old DOM with borders === */
+.compact-row, .post-card { border-bottom: none !important; }
+
 /* === Border / Divider === */
 hr {
   border: none;
@@ -226,7 +245,6 @@ code:not(pre code) {
     align-items: center;
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
-    border-bottom: 1px solid var(--border);
   }
 }
 

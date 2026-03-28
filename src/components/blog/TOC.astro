@@ -10,12 +10,12 @@ interface Props {
 }
 
 const { headings } = Astro.props;
-const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+const filtered = headings.filter(h => h.depth >= 1 && h.depth <= 3);
 ---
 
 {filtered.length > 0 && (
   <nav class="toc">
-    <p class="toc-label">On this page</p>
+    <button class="toc-label" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
     <ul>
       {filtered.map(h => (
         <li>
@@ -41,6 +41,16 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 0.625rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    transition: color 0.15s ease;
+  }
+
+  .toc-label:hover {
+    color: var(--text-primary);
   }
 
   ul {
@@ -63,9 +73,19 @@ const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
     padding-left: 0.625rem;
   }
 
+  .toc-link.depth-1 {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .toc-link.depth-2 {
+    font-size: 0.77rem;
+    padding-left: 1.5rem;
+  }
+
   .toc-link.depth-3 {
-    padding-left: 1.25rem;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    padding-left: 2.75rem;
   }
 
   .toc-link:hover {
