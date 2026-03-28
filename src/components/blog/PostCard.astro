@@ -11,14 +11,15 @@ interface Props {
 const { title, slug, description, pubDate, category } = Astro.props;
 
 function formatDate(date: Date): string {
+  const dow = '일월화수목금토'[date.getDay()];
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 1) return '오늘';
-  if (diffDays < 7) return `${diffDays}일 전`;
-  if (diffDays < 31) return `${Math.floor(diffDays / 7)}주 전`;
-  return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  if (diffDays < 1) return `오늘 ${dow}`;
+  if (diffDays < 7) return `${diffDays}일 전 ${dow}`;
+  if (diffDays < 31) return `${Math.floor(diffDays / 7)}주 전 ${dow}`;
+  return `${date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} ${dow}`;
 }
 
 const formattedDate = formatDate(new Date(pubDate));
