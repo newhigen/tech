@@ -1,23 +1,40 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
+import TOC from '../components/blog/TOC.astro';
 
 interface Props {
   title: string;
   description?: string;
-  category?: string;
+  currentSlug?: string;
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description, category } = Astro.props;
+const { title, description, currentSlug, headings = [] } = Astro.props;
+const hasTOC = headings.filter(h => h.depth >= 2 && h.depth <= 3).length > 0;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="flex max-w-6xl mx-auto px-4 py-8 gap-8">
-    <aside class="w-64 flex-shrink-0">
-      <Sidebar category={category} />
+  <div style="max-width: 90rem; margin: 0 auto; padding: 2.5rem 2rem; display: flex; gap: 0;">
+
+    <!-- 왼쪽 nav: 18rem 고정 -->
+    <aside style="width: 13rem; flex-shrink: 0; padding-right: 1rem;">
+      <Sidebar currentSlug={currentSlug} />
     </aside>
-    <article class="flex-1 min-w-0">
+
+    <!-- 본문 -->
+    <article style="flex: 1; min-width: 0; padding: 0 2rem;">
       <slot />
     </article>
+
+    <!-- 오른쪽 TOC: 16rem 고정, 없으면 자리 차지 안 함 -->
+    {hasTOC ? (
+      <aside style="width: 16rem; flex-shrink: 0; padding-left: 2rem;">
+        <TOC headings={headings} />
+      </aside>
+    ) : (
+      <div style="width: 16rem; flex-shrink: 0;" />
+    )}
+
   </div>
 </BaseLayout>

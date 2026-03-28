@@ -2,29 +2,51 @@
 import PageLayout from '../layouts/PageLayout.astro';
 ---
 
-<PageLayout title="Resume" description="My resume">
-  <h2 class="text-2xl font-bold mt-8 mb-4">Experience</h2>
-  <div class="space-y-6 text-slate-700 dark:text-slate-300">
-    <div>
-      <h3 class="font-semibold">Software Developer</h3>
-      <p class="text-sm text-slate-600 dark:text-slate-400">Your Company · 2024 - Present</p>
-      <p class="mt-2">Description of your work and achievements</p>
+<PageLayout title="Resume" description="조성덕 이력서">
+
+  <div style="margin-bottom: 2rem;">
+    <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0 0 0.25rem;">4년 경력의 ML Engineer</p>
+  </div>
+
+  <div style="border-top: 1px solid var(--border); padding-top: 1.75rem; margin-bottom: 1.75rem;">
+    <h2 style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); margin: 0 0 1.25rem;">Experience</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.875rem;">
+
+      <div>
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline;">
+          <span style="font-weight: 600; color: var(--text-primary);">뷰노</span>
+          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2022.3 – 현재</span>
+        </div>
+        <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0.125rem 0 0.25rem;">ML Engineer</p>
+        <p style="font-size: 0.875rem; color: var(--text-tertiary); margin: 0;">흉부 X-ray · 폐 CT · 디지털 병리 진단 AI 제품 연구개발</p>
+      </div>
+
+      <div>
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline;">
+          <span style="font-weight: 600; color: var(--text-primary);">고려대 고성능비주얼컴퓨팅 연구실</span>
+          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2019.6 – 2022.2</span>
+        </div>
+        <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0.125rem 0 0.25rem;">Research Assistant</p>
+        <p style="font-size: 0.875rem; color: var(--text-tertiary); margin: 0;">딥러닝 기반 의료 영상 처리 연구 및 국제 챌린지 주최</p>
+      </div>
+
     </div>
   </div>
 
-  <h2 class="text-2xl font-bold mt-8 mb-4">Skills</h2>
-  <ul class="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-1">
-    <li>JavaScript / TypeScript</li>
-    <li>React, Astro</li>
-    <li>Node.js</li>
-    <li>SQL</li>
-  </ul>
+  <div style="border-top: 1px solid var(--border); padding-top: 1.75rem;">
+    <h2 style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); margin: 0 0 0.75rem;">Education</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
 
-  <h2 class="text-2xl font-bold mt-8 mb-4">Education</h2>
-  <div class="space-y-4 text-slate-700 dark:text-slate-300">
-    <div>
-      <h3 class="font-semibold">Bachelor of Science in Computer Science</h3>
-      <p class="text-sm text-slate-600 dark:text-slate-400">Your University · 2023</p>
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline;">
+        <span style="font-size: 0.875rem; color: var(--text-primary);">컴퓨터과학 석사 · 고려대학교</span>
+        <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2020 – 2022</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline;">
+        <span style="font-size: 0.875rem; color: var(--text-primary);">컴퓨터공학 학사 · 울산과학기술원 (UNIST)</span>
+        <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2015 – 2020</span>
+      </div>
+
     </div>
   </div>
+
 </PageLayout>

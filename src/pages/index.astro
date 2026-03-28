@@ -10,20 +10,19 @@ const recentPosts = allPosts
 ---
 
 <BaseLayout title="newhigen - Tech Blog">
-  <div class="max-w-4xl mx-auto px-4 py-12">
-    <section class="mb-16">
-      <h1 class="text-5xl font-bold mb-4">newhigen</h1>
-      <p class="text-lg text-slate-600 dark:text-slate-400 mb-2">
-        Welcome to my tech blog
-      </p>
-      <p class="text-slate-600 dark:text-slate-400">
-        Exploring software development, programming, and tech insights
+  <div style="max-width: 52rem; margin: 0 auto; padding: 4rem 2rem;">
+    <section style="margin-bottom: 4rem;">
+      <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 0.5rem;">newhigen</h1>
+      <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0;">
+        Software developer. Writing about what I learn.
       </p>
     </section>
 
     <section>
-      <h2 class="text-2xl font-bold mb-6">Recent Posts</h2>
-      <div class="space-y-4">
+      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0;">
+        Recent Posts
+      </h2>
+      <div>
         {recentPosts.map(post => (
           <PostCard
             title={post.data.title}
@@ -35,9 +34,9 @@ const recentPosts = allPosts
           />
         ))}
       </div>
-      <div class="mt-8">
-        <a href="/blog" class="text-blue-600 dark:text-blue-400 hover:underline">
-          View all posts →
+      <div style="margin-top: 1.5rem;">
+        <a href="/blog" style="font-size: 0.875rem; color: var(--text-tertiary);">
+          All →
         </a>
       </div>
     </section>

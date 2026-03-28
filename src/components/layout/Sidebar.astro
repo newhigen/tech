@@ -2,54 +2,128 @@
 import { getCollection } from 'astro:content';
 
 interface Props {
-  category?: string;
+  currentSlug?: string;
 }
 
-const { category } = Astro.props;
+const { currentSlug } = Astro.props;
 
-// Get all blog posts and extract unique categories
 const allPosts = await getCollection('blog');
-const categories = [...new Set(allPosts.map(post => post.data.category))].sort();
+const sorted = allPosts.sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
+  const cat = post.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(post);
+  return acc;
+}, {});
+
+const categories = Object.keys(grouped).sort();
+
+const activeCategory = currentSlug
+  ? sorted.find(p => p.id === currentSlug)?.data.category
+  : null;
 ---
 
-<div class="sticky top-4">
-  <div class="space-y-6">
-    <div>
-      <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-        Categories
-      </h3>
-      <ul class="space-y-2 text-sm">
-        <li>
-          <a href="/blog" class={`block py-1 px-2 rounded transition-colors ${!category ? 'bg-slate-100 dark:bg-slate-800 font-semibold' : 'hover:bg-slate-50 dark:hover:bg-slate-900'}`}>
-            All
-          </a>
-        </li>
-        {categories.map(cat => (
-          <li>
-            <a href={`/blog?category=${cat}`} class={`block py-1 px-2 rounded transition-colors ${category === cat ? 'bg-slate-100 dark:bg-slate-800 font-semibold' : 'hover:bg-slate-50 dark:hover:bg-slate-900'}`}>
-              {cat}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+<style>
+  .cat-btn:hover {
+    color: var(--text-primary) !important;
+    opacity: 1 !important;
+  }
+  .post-link:hover {
+    color: var(--text-primary) !important;
+    opacity: 1;
+  }
+</style>
 
-    <div>
-      <h3 class="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-        Links
-      </h3>
-      <ul class="space-y-2 text-sm">
-        <li>
-          <a href="https://github.com" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-        </li>
-        <li>
-          <a href="https://twitter.com" class="text-blue-600 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
-            Twitter
-          </a>
-        </li>
-      </ul>
-    </div>
+<nav style="position: sticky; top: 1.5rem;">
+  <div style="display: flex; flex-direction: column; gap: 0.125rem;">
+    {categories.map(cat => {
+      const isOpen = activeCategory === cat;
+      const catId = cat.replace(/\s+/g, '-').toLowerCase();
+      return (
+        <div style="margin-bottom: 0.25rem;">
+          <button
+            data-cat-toggle={catId}
+            aria-expanded={String(isOpen)}
+            class="cat-btn"
+            style={`
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+              padding: 0.5rem 0.25rem 0.25rem;
+              border: none;
+              background: none;
+              cursor: pointer;
+              font-size: 0.6875rem;
+              font-weight: 600;
+              color: var(--text-tertiary);
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+              text-align: left;
+            `}
+          >
+            {cat}
+            <svg
+              data-cat-arrow={catId}
+              width="10" height="10" viewBox="0 0 10 10" fill="currentColor"
+              style={`transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(${isOpen ? '90deg' : '0deg'}); opacity: 0.5; flex-shrink: 0;`}
+            >
+              <path d="M3 2l4 3-4 3V2z"/>
+            </svg>
+          </button>
+
+          <ul
+            id={`cat-${catId}`}
+            style={`list-style: none; margin: 0; padding: 0; overflow: hidden; max-height: ${isOpen ? '600px' : '0'}; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);`}
+          >
+            {grouped[cat].map(post => {
+              const isActive = currentSlug === post.id;
+              return (
+                <li>
+                  <a
+                    href={`/blog/${post.id}`}
+                    class="post-link"
+                    style={`
+                      display: block;
+                      padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+                      font-size: 0.8125rem;
+                      line-height: 1.6;
+                      color: ${isActive ? 'var(--text-primary)' : 'var(--text-tertiary)'};
+                      font-weight: ${isActive ? '500' : '400'};
+                      transition: color 0.15s ease;
+                    `}
+                  >
+                    {post.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    })}
   </div>
-</div>
+</nav>
+
+<script is:inline>
+  function initSidebar() {
+    document.querySelectorAll('[data-cat-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const catId = btn.getAttribute('data-cat-toggle');
+        const list = document.getElementById('cat-' + catId);
+        const arrow = document.querySelector('[data-cat-arrow="' + catId + '"]');
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        list.style.maxHeight = isOpen ? '0' : '600px';
+        arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
+        btn.style.color = isOpen ? 'var(--text-secondary)' : 'var(--text-primary)';
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initSidebar);
+</script>

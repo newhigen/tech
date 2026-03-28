@@ -2,35 +2,29 @@
 import ThemeToggle from '../ui/ThemeToggle.astro';
 ---
 
-<header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-  <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-8">
-      <a href="/" class="text-lg font-semibold hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-        newhigen
-      </a>
-      <ul class="flex gap-6 text-sm">
-        <li>
-          <a href="/blog" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-            Blog
-          </a>
-        </li>
-        <li>
-          <a href="/projects" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-            Projects
-          </a>
-        </li>
-        <li>
-          <a href="/about" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-            About
-          </a>
-        </li>
-        <li>
-          <a href="/resume" class="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-            Resume
-          </a>
-        </li>
-      </ul>
+<style>
+  .nav-link {
+    color: var(--text-secondary);
+  }
+  .nav-link:hover {
+    color: var(--text-primary);
+    opacity: 1;
+  }
+</style>
+
+<header style="border-bottom: 1px solid var(--border); background-color: var(--bg);">
+  <nav style="max-width: 90rem; margin: 0 auto; padding: 1rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;">
+    <a href="/" style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">
+      newhigen
+    </a>
+    <ul style="display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; font-size: 0.875rem;">
+      <li><a href="/blog" class="nav-link">Tech</a></li>
+      <li><a href="/projects" class="nav-link">Projects</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/resume" class="nav-link">Resume</a></li>
+    </ul>
+    <div style="display: flex; justify-content: flex-end;">
+      <ThemeToggle />
     </div>
-    <ThemeToggle />
   </nav>
 </header>

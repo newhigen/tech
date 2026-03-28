@@ -1,5 +1,7 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import '../styles/post.css';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 
@@ -8,7 +10,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'newhigen\'s tech blog' } = Astro.props;
+const { title, description = "newhigen's tech blog" } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -19,16 +21,16 @@ const { title, description = 'newhigen\'s tech blog' } = Astro.props;
     <meta name="description" content={description} />
     <title>{title}</title>
 
-    <!-- Theme initialization script to prevent FOUC -->
+    <ClientRouter />
     <script is:inline>
       const theme = localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.classList.toggle('dark', theme === 'dark');
     </script>
   </head>
-  <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-200">
+  <body>
     <Header />
-    <main class="min-h-screen">
+    <main style="min-height: 100vh;">
       <slot />
     </main>
     <Footer />

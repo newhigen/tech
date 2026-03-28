@@ -1,0 +1,112 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const filtered = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{filtered.length > 0 && (
+  <nav class="toc">
+    <p class="toc-label">On this page</p>
+    <ul>
+      {filtered.map(h => (
+        <li>
+          <a href={`#${h.slug}`} class={`toc-link depth-${h.depth}`}>
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .toc {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .toc-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.625rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .toc-link {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    padding: 0.2rem 0;
+    transition: color 0.15s ease, border-left-color 0.15s ease;
+    border-left: 2px solid transparent;
+    padding-left: 0.625rem;
+  }
+
+  .toc-link.depth-3 {
+    padding-left: 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  .toc-link:hover {
+    color: var(--text-primary);
+    border-left-color: var(--text-tertiary);
+    opacity: 1;
+  }
+
+  .toc-link.active {
+    color: var(--text-primary);
+    border-left-color: var(--text-secondary);
+    font-weight: 500;
+  }
+</style>
+
+<script is:inline>
+  function initTOC() {
+    const links = document.querySelectorAll('.toc-link');
+    if (!links.length) return;
+
+    const headingIds = Array.from(links).map(l => l.getAttribute('href')?.slice(1));
+    const headings = headingIds
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    function onScroll() {
+      let current = '';
+      for (const el of headings) {
+        if (el.getBoundingClientRect().top <= 100) {
+          current = el.id;
+        }
+      }
+      links.forEach(link => {
+        const isActive = link.getAttribute('href') === '#' + current;
+        link.classList.toggle('active', isActive);
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  document.addEventListener('astro:page-load', initTOC);
+</script>
