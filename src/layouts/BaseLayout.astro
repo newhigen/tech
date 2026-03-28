@@ -23,6 +23,19 @@ const { title, description = "newhigen's tech blog" } = Astro.props;
     <title>{title}</title>
 
     <ClientRouter />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QHJJSW8L6X"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QHJJSW8L6X');
+      document.addEventListener('astro:page-load', () => {
+        gtag('config', 'G-QHJJSW8L6X', { page_path: window.location.pathname });
+      });
+    </script>
+
     <script is:inline>
       const theme = localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
