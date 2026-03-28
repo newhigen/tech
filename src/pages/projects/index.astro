@@ -8,7 +8,7 @@ const allProjects = await getCollection('projects');
 
 <BaseLayout title="Projects - newhigen" description="My projects and portfolio">
   <div class="page-container" style="max-width: 52rem; margin: 0 auto; padding: 3rem 2rem;">
-    <h1 style="font-size: 2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 2rem;">Projects</h1>
+    <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 2rem;">Projects</h1>
     <div>
       {allProjects.map(project => (
         <ProjectCard
