@@ -167,6 +167,7 @@ article table {
   article h3 { font-size: 0.9375rem; }
   article p, article ul, article ol { font-size: 0.8125rem; }
   article pre { font-size: 0.6875rem; }
+  article table, article th, article td { font-size: 0.75rem; }
 }
 
 article th {
