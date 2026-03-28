@@ -8,6 +8,29 @@ tags: [Claude]
 
 출처: [Introduction to Subagents](https://anthropic.skilljar.com/introduction-to-subagents)
 
+# Tips
+
+## Given
+
+### Description
+- use keyword **'proactively'**: delegate tasks without explicit asking
+
+### System Prompts
+- define **output format**: provides stopping points and prevents unnecessary long run
+- add **report obstacles**: to prevent rediscover of solution at main thread
+
+### When to Use
+- if you don't need intermediate steps, then use subagents
+	- running tests showed worse performance
+
+## Thought
+
+It is important to well specify description.
+- Q. What is a 'well specified' description?
+- Thus, it is important to have domain knowledge more than model's current limit.
+
+# Content
+
 ## What are Subagents?
 
 태스크를 위임하는 helper. 독립된 conversation context에서 실행되고 결과를 main thread로 요약해서 반환한다.
