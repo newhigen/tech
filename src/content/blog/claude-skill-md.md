@@ -1,7 +1,7 @@
 ---
 title: "SKILL.md"
 description: SKILL.md로 Claude Code에 task-specific 전문성을 추가하는 방법과 CLAUDE.md와의 차이
-pubDate: 2024-03-27
+pubDate: 2026-03-25
 category: Agent
 tags: [claude, skill, automation]
 ---
