@@ -53,9 +53,6 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
     width: 16rem;
     flex-shrink: 0;
   }
-  .mobile-cat-nav {
-    display: none;
-  }
 
   @media (max-width: 1024px) {
     .toc-aside, .toc-placeholder { display: none; }
@@ -66,36 +63,43 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
     .layout-wrapper { padding: 1rem 0; }
     .sidebar-aside { display: none; }
     .article-main { padding: 0 1.25rem; }
-    .mobile-cat-nav { display: block; }
   }
-
-
 </style>
 
 <BaseLayout title={title} description={description}>
 
-  <!-- 모바일 카테고리 가로 스크롤 nav -->
-  <div class="mobile-cat-nav">
-    <div class="cat-tabs" id="cat-tabs">
-      {categories.map(cat => (
-        <button
-          class={`cat-tab${activeCategory === cat ? ' active' : ''}`}
-          data-cat={cat}
-        >{cat}</button>
-      ))}
+  <!-- 드로워 오버레이 -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+  <!-- 드로워 패널 -->
+  <div class="drawer-panel" id="drawer-panel">
+    <div class="drawer-header">
+      <span class="drawer-title">Categories</span>
+      <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
     </div>
-    <div id="cat-posts-panel" class="cat-posts" style="display: none;">
-      {categories.map(cat => (
-        <div data-cat-panel={cat} style="display: none;">
-          {grouped[cat].map(post => (
-            <a
-              href={`/${post.id}`}
-              class={currentSlug === post.id ? 'active-post' : ''}
-            >{post.data.title}</a>
-          ))}
-        </div>
-      ))}
-    </div>
+    {categories.map(cat => (
+      <div class="drawer-cat">
+        <div class={`drawer-cat-label${activeCategory === cat ? ' active-cat' : ''}`}>{cat}</div>
+        {grouped[cat].map(post => (
+          <a
+            href={`/${post.id}`}
+            class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
+          >{post.data.title}</a>
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <!-- 모바일 드로워 트리거 -->
+  <div class="drawer-trigger">
+    <button id="drawer-open" aria-label="Open navigation" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 0; display: flex; align-items: center; gap: 0.375rem;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="2" y1="4" x2="14" y2="4"/>
+        <line x1="2" y1="8" x2="14" y2="8"/>
+        <line x1="2" y1="12" x2="14" y2="12"/>
+      </svg>
+      <span style="font-size: 0.75rem; color: var(--text-tertiary);">{activeCategory ?? 'Categories'}</span>
+    </button>
   </div>
 
   <div class="layout-wrapper">
@@ -119,38 +123,27 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
 </BaseLayout>
 
 <script is:inline>
-  function initMobileCatNav() {
-    const tabs = document.querySelectorAll('.cat-tab');
-    const panel = document.getElementById('cat-posts-panel');
-    if (!tabs.length || !panel) return;
+  function initDrawer() {
+    const openBtn = document.getElementById('drawer-open');
+    const closeBtn = document.getElementById('drawer-close');
+    const overlay = document.getElementById('drawer-overlay');
+    const panel = document.getElementById('drawer-panel');
+    if (!openBtn || !closeBtn || !overlay || !panel) return;
 
-    let openCat = null;
+    function openDrawer() {
+      panel.classList.add('open');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      panel.classList.remove('open');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const cat = tab.getAttribute('data-cat');
-        if (openCat === cat) {
-          // 같은 탭 다시 누르면 닫기
-          panel.style.display = 'none';
-          tab.classList.remove('active');
-          openCat = null;
-          return;
-        }
-        // 모든 패널 숨기고 탭 비활성화
-        document.querySelectorAll('[data-cat-panel]').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('.cat-tab').forEach(t => {
-          if (!t.classList.contains('active') || t !== tab) t.classList.remove('active');
-        });
-        // 선택한 카테고리 패널 열기
-        const catPanel = document.querySelector(`[data-cat-panel="${cat}"]`);
-        if (catPanel) {
-          catPanel.style.display = 'block';
-          panel.style.display = 'block';
-          tab.classList.add('active');
-          openCat = cat;
-        }
-      });
-    });
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
   }
-  document.addEventListener('astro:page-load', initMobileCatNav);
+  document.addEventListener('astro:page-load', initDrawer);
 </script>

@@ -1,31 +1,25 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
 import ProjectCard from '../../components/project/ProjectCard.astro';
 
 const allProjects = await getCollection('projects');
 ---
 
-<BaseLayout title="Projects - newhigen" description="My projects and portfolio">
-  <div style="max-width: 90rem; margin: 0 auto; padding: 2.5rem 2rem; display: flex;">
-    <div class="page-sidebar-spacer" style="width: 13rem; flex-shrink: 0; padding-right: 1rem;"></div>
-    <div class="page-container" style="flex: 1; min-width: 0; padding: 0 2rem;">
-      <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin: 0 0 2rem;">Projects</h1>
-      <div>
-        {allProjects.map(project => (
-          <ProjectCard
-            title={project.data.title}
-            slug={project.id}
-            description={project.data.description}
-            link={project.data.link}
-            github={project.data.github}
-            tags={project.data.tags}
-          />
-        ))}
-        {allProjects.length === 0 && (
-          <p style="color: var(--text-secondary);">No projects yet.</p>
-        )}
-      </div>
-    </div>
+<PageLayout title="Projects">
+  <div>
+    {allProjects.map(project => (
+      <ProjectCard
+        title={project.data.title}
+        slug={project.id}
+        description={project.data.description}
+        link={project.data.link}
+        github={project.data.github}
+        tags={project.data.tags}
+      />
+    ))}
+    {allProjects.length === 0 && (
+      <p style="color: var(--text-secondary);">No projects yet.</p>
+    )}
   </div>
-</BaseLayout>
+</PageLayout>
