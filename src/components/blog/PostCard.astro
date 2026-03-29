@@ -11,19 +11,36 @@ interface Props {
 
 const { title, slug, description, pubDate, category, compact = false } = Astro.props;
 
-function formatDate(date: Date): string {
+function formatDate(date: Date): { text: string; color: string } {
   const dow = '일월화수목금토'[date.getDay()];
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 1) return `오늘 (${dow})`;
-  if (diffDays < 7) return `${diffDays}일 전 (${dow})`;
-  if (diffDays < 31) return `${Math.floor(diffDays / 7)}주 전 (${dow})`;
-  return `${date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} (${dow})`;
+  let text = '';
+  let color = '';
+
+  if (diffDays < 1) {
+    text = `오늘 (${dow})`;
+    color = 'rgb(217, 119, 6)'; // amber
+  } else if (diffDays < 7) {
+    text = `${diffDays}일 전 (${dow})`;
+    color = 'rgb(192, 132, 16)'; // orange-brown
+  } else if (diffDays < 31) {
+    text = `${Math.floor(diffDays / 7)}주 전 (${dow})`;
+    color = 'rgb(120, 113, 108)'; // warm gray
+  } else if (diffDays < 365) {
+    text = `${Math.floor(diffDays / 30)}달 전 (${dow})`;
+    color = 'rgb(107, 114, 128)'; // slate
+  } else {
+    text = `${date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} (${dow})`;
+    color = 'rgb(100, 116, 139)'; // slate-blue
+  }
+
+  return { text, color };
 }
 
-const formattedDate = formatDate(new Date(pubDate));
+const { text: formattedDate, color: dateColor } = formatDate(new Date(pubDate));
 ---
 
 <style>
@@ -114,14 +131,14 @@ const formattedDate = formatDate(new Date(pubDate));
   <div class="compact-row">
     <a href={`/${slug}`} class="compact-title">{title}</a>
     <span class="dotted-divider">·····························································································································································</span>
-    <span class="post-date">{formattedDate}</span>
+    <span class="post-date" style={`color: ${dateColor}`}>{formattedDate}</span>
   </div>
 ) : (
   <article class="post-card">
     <div class="post-row">
       <a href={`/${slug}`} class="post-title">{title}</a>
       <span class="dotted-divider">·····························································································································································</span>
-      <span class="post-date">{formattedDate}</span>
+      <span class="post-date" style={`color: ${dateColor}`}>{formattedDate}</span>
     </div>
     <div class="post-meta">
       <span class="post-category">{category}</span>

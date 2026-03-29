@@ -67,8 +67,13 @@ article ol {
   color: var(--text-secondary);
   font-size: 0.9375rem;
   line-height: 1.6;
-  margin: 0.25rem 0 1rem;
+  margin: 0 0 1rem;
   padding-left: 1.5rem;
+}
+
+article p + ul,
+article p + ol {
+  margin-top: -1rem;
 }
 
 article ul {
