@@ -16,6 +16,7 @@ const allProjects = await getCollection('projects');
         link={project.data.link}
         github={project.data.github}
         tags={project.data.tags}
+        period={project.data.period}
       />
     ))}
     {allProjects.length === 0 && (

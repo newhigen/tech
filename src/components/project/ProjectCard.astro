@@ -6,15 +6,21 @@ interface Props {
   link?: string;
   github?: string;
   tags?: string[];
+  period?: string;
 }
 
-const { title, slug, description, link, github, tags = [] } = Astro.props;
+const { title, slug, description, link, github, tags = [], period } = Astro.props;
 ---
 
 <article style="padding: 1.25rem 0; border-bottom: 1px solid var(--border);">
-  <a href={`/projects/${slug}`} style="display: block; margin-bottom: 0.375rem;">
-    <h2 style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0;">{title}</h2>
-  </a>
+  <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 0.375rem;">
+    <a href={`/projects/${slug}`} style="display: block;">
+      <h2 style="font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0;">{title}</h2>
+    </a>
+    {period && (
+      <span style="font-size: 0.75rem; color: var(--text-tertiary);">{period}</span>
+    )}
+  </div>
   <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0 0 0.625rem; line-height: 1.6;">
     {description}
   </p>
