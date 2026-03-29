@@ -21,17 +21,17 @@ import ThemeToggle from '../ui/ThemeToggle.astro';
   }
 
   .menu-overlay {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.3);
     z-index: 40;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.25s ease;
   }
   .menu-overlay.open {
-    display: block;
     opacity: 1;
+    pointer-events: auto;
   }
 
   .mobile-menu {
@@ -56,6 +56,16 @@ import ThemeToggle from '../ui/ThemeToggle.astro';
   .mobile-menu a {
     font-size: 0.9375rem;
     color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .mobile-menu a:hover {
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 641px) {
+    .menu-overlay { display: none !important; }
+    .mobile-menu { display: none !important; }
+    .hamburger { display: none !important; }
   }
 
   @media (max-width: 640px) {
