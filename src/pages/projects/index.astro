@@ -7,7 +7,7 @@ const allProjects = await getCollection('projects');
 ---
 
 <PageLayout title="Projects">
-  <div>
+  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
     {allProjects.map(project => (
       <ProjectCard
         title={project.data.title}
