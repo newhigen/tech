@@ -66,6 +66,27 @@ function formatRelativeDate(date: Date): { text: string; color: string } {
     flex-shrink: 0;
   }
 
+  [data-drawer-cat-toggle]:hover {
+    color: var(--text-primary) !important;
+  }
+
+  .drawer-post-link {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .drawer-post-link:hover {
+    color: var(--text-primary);
+    opacity: 1;
+  }
+  .drawer-post-link.active-post {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
   @media (max-width: 1024px) {
     .toc-aside, .toc-placeholder { display: none; }
     .article-main { padding: 0 1rem; }
@@ -89,23 +110,59 @@ function formatRelativeDate(date: Date): { text: string; color: string } {
       <span class="drawer-title">Categories</span>
       <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
     </div>
-    {categories.map(cat => (
-      <div class="drawer-cat">
-        <div class={`drawer-cat-label${activeCategory === cat ? ' active-cat' : ''}`}>{cat}</div>
-        {grouped[cat].map(post => {
-          const { text: relDate, color: dateColor } = formatRelativeDate(new Date(post.data.pubDate));
-          return (
-            <a
-              href={`/${post.id}`}
-              class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
+    {categories.map(cat => {
+      const isOpen = activeCategory === cat;
+      const catId = cat.replace(/\s+/g, '-').toLowerCase();
+      return (
+        <div key={catId} style="margin-bottom: 0.375rem;">
+          <button
+            data-drawer-cat-toggle={catId}
+            aria-expanded={String(isOpen)}
+            style={`
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+              padding: 0.375rem 0.25rem;
+              border: none;
+              background: none;
+              cursor: pointer;
+              font-size: 0.8125rem;
+              font-weight: 500;
+              color: var(--text-secondary);
+              text-align: left;
+            `}
+          >
+            {cat}
+            <svg
+              data-drawer-cat-arrow={catId}
+              width="10" height="10" viewBox="0 0 10 10" fill="currentColor"
+              style={`transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(${isOpen ? '90deg' : '0deg'}); opacity: 0.5; flex-shrink: 0;`}
             >
-              <span style="max-width: 10rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{post.data.title}</span>
-              <span style={`font-size: 0.75rem; color: ${dateColor}; opacity: 0.65; flex-shrink: 0; margin-left: 0.25rem;`}>{relDate}</span>
-            </a>
-          );
-        })}
-      </div>
-    ))}
+              <path d="M3 2l4 3-4 3V2z"/>
+            </svg>
+          </button>
+
+          <div
+            id={`drawer-cat-${catId}`}
+            style={`list-style: none; margin: 0; padding: 0 0 0 0.5rem; overflow: hidden; max-height: ${isOpen ? '600px' : '0'}; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);`}
+          >
+            {grouped[cat].map(post => {
+              const { text: relDate, color: dateColor } = formatRelativeDate(new Date(post.data.pubDate));
+              return (
+                <a
+                  href={`/${post.id}`}
+                  class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
+                >
+                  <span style="max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{post.data.title}</span>
+                  <span style={`font-size: 0.75rem; color: ${dateColor}; opacity: 0.65; flex-shrink: 0; margin-left: 0.25rem;`}>{relDate}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })}
   </div>
 
   <!-- 모바일 드로워 트리거 -->
@@ -158,6 +215,24 @@ function formatRelativeDate(date: Date): { text: string; color: string } {
     openBtn.addEventListener('click', openDrawer);
     closeBtn.addEventListener('click', closeDrawer);
     overlay.addEventListener('click', closeDrawer);
+
+    // Category toggle functionality
+    const catToggles = panel.querySelectorAll('[data-drawer-cat-toggle]');
+    catToggles.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const catId = btn.getAttribute('data-drawer-cat-toggle');
+        const catContent = document.getElementById(`drawer-cat-${catId}`);
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', !isOpen);
+        catContent.style.maxHeight = !isOpen ? '600px' : '0';
+
+        const arrow = document.querySelector(`[data-drawer-cat-arrow="${catId}"]`);
+        if (arrow) {
+          arrow.style.transform = !isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+        }
+      });
+    });
   }
   document.addEventListener('astro:page-load', initDrawer);
 </script>
