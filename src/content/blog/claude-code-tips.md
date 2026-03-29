@@ -15,7 +15,7 @@ Ghostty를 wrapping한 터미널이다. pane 분할이 편하고, 알림이 잘 
 설정은 Ghostty 설정 파일(`~/.config/ghostty/config`)과 동일하게 사용한다.\n- [cmux 공식 사이트](https://cmux.com/)
 - [GitHub](https://github.com/manaflow-ai/cmux)
 
-<div style="border-bottom: 1px dashed rgba(0,0,0,0.15);"></div>
+<div style="border-bottom: 1px dashed var(--border);"></div>
 
 ## 알림 및 소리 설정
 
@@ -53,7 +53,7 @@ peon --pack sc_scv
 
 저장하면 바로 적용된다.
 
-<div style="border-bottom: 1px dashed rgba(0,0,0,0.15);"></div>
+<div style="border-bottom: 1px dashed var(--border);"></div>
 
 ## 모바일에서 Claude Code 사용
 
