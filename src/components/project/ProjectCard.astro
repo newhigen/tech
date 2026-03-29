@@ -12,6 +12,16 @@ interface Props {
 const { title, slug, description, link, github, tags = [], period } = Astro.props;
 const domain = link ? new URL(link).hostname : null;
 const href = `/projects/${slug}`;
+
+function calcMonths(p?: string) {
+  if (!p) return null;
+  const m = p.match(/(\d{4})\.(\d{2})/);
+  if (!m) return null;
+  const now = new Date();
+  const months = (now.getFullYear() - parseInt(m[1])) * 12 + (now.getMonth() + 1 - parseInt(m[2])) + 1;
+  return months > 0 ? months : 1;
+}
+const months = calcMonths(period);
 ---
 
 <article class="project-card" data-href={href}>
@@ -21,7 +31,7 @@ const href = `/projects/${slug}`;
         {title}
         {domain && <span class="domain">· {domain}</span>}
       </h2>
-      {period && <span class="period">{period}</span>}
+      {period && <span class="period">{period}{months !== null ? ` · ${months}개월` : ''}</span>}
     </div>
     <div class="links">
       {github && (
