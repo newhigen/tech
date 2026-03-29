@@ -27,6 +27,7 @@ const sortedProjects = [...allProjects].sort(
         github={project.data.github}
         tags={project.data.tags}
         period={project.data.period}
+        icon={project.data.icon}
       />
     ))}
     {sortedProjects.length === 0 && (
