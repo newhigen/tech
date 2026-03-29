@@ -14,25 +14,3 @@
   </span>
 </button>
 
-<script is:inline>
-  (function() {
-    const btn = document.getElementById('theme-toggle');
-    const sunIcon = btn?.querySelector('.sun-icon');
-    const moonIcon = btn?.querySelector('.moon-icon');
-
-    function updateIcons(isDark) {
-      if (sunIcon) sunIcon.style.display = isDark ? 'none' : 'block';
-      if (moonIcon) moonIcon.style.display = isDark ? 'block' : 'none';
-    }
-
-    // Set initial icon state
-    const isDark = document.documentElement.classList.contains('dark');
-    updateIcons(isDark);
-
-    btn?.addEventListener('click', function() {
-      const nowDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', nowDark ? 'dark' : 'light');
-      updateIcons(nowDark);
-    });
-  })();
-</script>

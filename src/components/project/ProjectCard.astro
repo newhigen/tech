@@ -7,145 +7,186 @@ interface Props {
   github?: string;
   tags?: string[];
   period?: string;
+  icon?: string;
 }
 
-const { title, slug, description, link, github, tags = [], period } = Astro.props;
+const { title, slug, description, link, github, tags = [], period, icon } = Astro.props;
 const domain = link ? new URL(link).hostname : null;
+const href = `/projects/${slug}`;
+
+function calcDuration(p?: string) {
+  if (!p) return null;
+  const m = p.match(/(\d{4})\.(\d{2})/);
+  if (!m) return null;
+  const now = new Date();
+  const total = (now.getFullYear() - parseInt(m[1])) * 12 + (now.getMonth() + 1 - parseInt(m[2])) + 1;
+  const n = total > 0 ? total : 1;
+  if (n < 12) return `${n}개월`;
+  const years = Math.floor(n / 12);
+  const rem = n % 12;
+  return rem === 0 ? `${years}년` : `${years}년 ${rem}개월`;
+}
+const duration = calcDuration(period);
 ---
 
-<article class="project-card">
-  <a href={`/projects/${slug}`} class="card-overlay" aria-label={title}></a>
-  <div class="card-top">
-    <div class="title-row">
-      <h2 class="title">
-        {title}
-        {domain && <span class="domain">· {domain}</span>}
-      </h2>
-      {period && <span class="period">{period}</span>}
+<article class="project-card" data-href={href}>
+  <div class="card-content">
+    <div class="row-top">
+      <h2 class="title">{title}</h2>
+      {period && <span class="meta">{period}{duration ? ` (${duration})` : ''}</span>}
     </div>
-    <div class="links">
+    <p class="description">{description}</p>
+    <div class="row-bottom">
+      {domain && <span class="domain">{icon && <span class="icon">{icon}</span>}{domain}</span>}
+      {tags.map(tag => <span class="tag">{tag}</span>)}
       {github && (
-        <a href={github} target="_blank" rel="noopener noreferrer" class="ext-link">GitHub →</a>
+        <a href={github} target="_blank" rel="noopener noreferrer" class="github-link">GitHub →</a>
       )}
     </div>
   </div>
-  <p class="description">{description}</p>
-  {tags.length > 0 && (
-    <div class="tags">
-      {tags.map(tag => (
-        <span class="tag">{tag}</span>
-      ))}
-    </div>
-  )}
+  <div class="arrow" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <line class="arrow-line" x1="2" y1="12" x2="19" y2="12" />
+      <polyline class="arrow-head" points="13 6 19 12 13 18" />
+    </svg>
+  </div>
 </article>
+
+<script>
+  import { navigate } from 'astro:transitions/client';
+
+  document.addEventListener('click', (e) => {
+    const card = (e.target as Element).closest<HTMLElement>('[data-href].project-card');
+    if (!card) return;
+    if ((e.target as Element).closest('a')) return;
+    navigate(card.dataset.href!);
+  });
+</script>
 
 <style>
   .project-card {
-    position: relative;
-    padding: 1rem 1.125rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--code-bg);
-    opacity: 0.8;
+    border-radius: 10px;
     cursor: pointer;
-    transition: border-color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
   .project-card:hover {
+    background-color: var(--selection);
     border-color: var(--text-tertiary);
-    opacity: 1;
   }
 
-  .card-overlay {
-    position: absolute;
-    inset: 0;
-    border-radius: 8px;
-    z-index: 0;
+  .card-content {
+    flex: 1;
+    min-width: 0;
   }
 
-  .card-top {
-    position: relative;
-    z-index: 1;
+  .row-top {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .title-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.625rem;
-    min-width: 0;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
   }
 
   .title {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary);
     margin: 0;
     padding: 0;
     border: none;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .domain {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    margin-left: 0.25rem;
-  }
-
-  .period {
+  .meta {
     font-size: 0.75rem;
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
     white-space: nowrap;
     flex-shrink: 0;
-  }
-
-  .links {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    gap: 0.75rem;
-    flex-shrink: 0;
-  }
-
-  .ext-link {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .ext-link:hover {
-    color: var(--text-primary);
-    opacity: 1;
   }
 
   .description {
-    position: relative;
-    z-index: 1;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--text-secondary);
-    margin: 0 0 0.5rem;
-    line-height: 1.55;
+    margin: 0 0 0.3rem;
+    line-height: 1.45;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .tags {
-    position: relative;
-    z-index: 1;
+  .row-bottom {
     display: flex;
-    gap: 0.375rem;
+    align-items: center;
+    gap: 0.5rem;
     flex-wrap: wrap;
   }
 
+  .domain {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+  }
+
+  .icon {
+    margin-right: 0.15rem;
+  }
+
   .tag {
-    font-size: 0.725rem;
-    padding: 0.1rem 0.45rem;
+    font-size: 0.7rem;
+    padding: 0.05rem 0.4rem;
     border-radius: 4px;
     border: 1px solid var(--border);
+    color: var(--text-tertiary);
+  }
+
+  .github-link {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
+  }
+
+  .github-link:hover {
+    color: var(--text-secondary);
+    opacity: 1;
+  }
+
+  .arrow {
+    flex-shrink: 0;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+  }
+
+  .arrow-line {
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+  }
+
+  .arrow-head {
+    transform: translateX(5px);
+    transition: transform 0.25s ease;
+  }
+
+  .project-card:hover .arrow-line {
+    transform: scaleX(1);
+  }
+
+  .project-card:hover .arrow-head {
+    transform: translateX(0);
+  }
+
+  .project-card:hover .arrow {
     color: var(--text-secondary);
   }
 </style>

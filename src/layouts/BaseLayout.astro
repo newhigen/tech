@@ -37,9 +37,32 @@ const { title, description = "newhigen's tech blog" } = Astro.props;
     </script>
 
     <script is:inline>
-      const theme = localStorage.getItem('theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.classList.toggle('dark', theme === 'dark');
+      function applyTheme() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
+
+      function updateThemeIcons() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isDark = document.documentElement.classList.contains('dark');
+        const sun = btn.querySelector('.sun-icon');
+        const moon = btn.querySelector('.moon-icon');
+        if (sun) sun.style.display = isDark ? 'none' : 'block';
+        if (moon) moon.style.display = isDark ? 'block' : 'none';
+      }
+      document.addEventListener('astro:page-load', updateThemeIcons);
+
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('#theme-toggle')) {
+          const nowDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+          updateThemeIcons();
+        }
+      });
     </script>
   </head>
   <body>

@@ -5,4 +5,5 @@ link: https://sungd.uk
 github: https://github.com/newhigen/blog
 tags: [Astro, Claude]
 period: "2025.07 –"
+icon: "¶"
 ---
