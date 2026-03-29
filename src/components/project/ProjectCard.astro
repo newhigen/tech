@@ -13,15 +13,19 @@ const { title, slug, description, link, github, tags = [], period } = Astro.prop
 const domain = link ? new URL(link).hostname : null;
 const href = `/projects/${slug}`;
 
-function calcMonths(p?: string) {
+function calcDuration(p?: string) {
   if (!p) return null;
   const m = p.match(/(\d{4})\.(\d{2})/);
   if (!m) return null;
   const now = new Date();
-  const months = (now.getFullYear() - parseInt(m[1])) * 12 + (now.getMonth() + 1 - parseInt(m[2])) + 1;
-  return months > 0 ? months : 1;
+  const total = (now.getFullYear() - parseInt(m[1])) * 12 + (now.getMonth() + 1 - parseInt(m[2])) + 1;
+  const n = total > 0 ? total : 1;
+  if (n < 12) return `${n}개월`;
+  const years = Math.floor(n / 12);
+  const rem = n % 12;
+  return rem === 0 ? `${years}년` : `${years}년 ${rem}개월`;
 }
-const months = calcMonths(period);
+const duration = calcDuration(period);
 ---
 
 <article class="project-card" data-href={href}>
@@ -31,7 +35,7 @@ const months = calcMonths(period);
         {title}
         {domain && <span class="domain">· {domain}</span>}
       </h2>
-      {period && <span class="period">{period}{months !== null ? ` · ${months}개월` : ''}</span>}
+      {period && <span class="period">{period}{duration ? ` (${duration})` : ''}</span>}
     </div>
     <div class="links">
       {github && (
