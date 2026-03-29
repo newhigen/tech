@@ -24,6 +24,18 @@ const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
 }, {});
 const categories = Object.keys(grouped).sort();
 const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.data.category : null;
+
+function formatRelativeDate(date: Date): { text: string; color: string } {
+  const now = new Date();
+  const diffMs = now.getTime() - new Date(date).getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 1) return { text: '오늘', color: 'rgb(217, 119, 6)' }; // amber
+  if (diffDays < 7) return { text: `${diffDays}일 전`, color: 'rgb(192, 132, 16)' }; // orange-brown
+  if (diffDays < 31) return { text: `${Math.floor(diffDays / 7)}주 전`, color: 'rgb(120, 113, 108)' }; // warm gray
+  if (diffDays < 365) return { text: `${Math.floor(diffDays / 30)}달 전`, color: 'rgb(107, 114, 128)' }; // slate
+  return { text: `${Math.floor(diffDays / 365)}년 전`, color: 'rgb(100, 116, 139)' }; // slate-blue
+}
 ---
 
 <style>
@@ -80,12 +92,18 @@ const activeCategory = currentSlug ? sorted.find(p => p.id === currentSlug)?.dat
     {categories.map(cat => (
       <div class="drawer-cat">
         <div class={`drawer-cat-label${activeCategory === cat ? ' active-cat' : ''}`}>{cat}</div>
-        {grouped[cat].map(post => (
-          <a
-            href={`/${post.id}`}
-            class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
-          >{post.data.title}</a>
-        ))}
+        {grouped[cat].map(post => {
+          const { text: relDate, color: dateColor } = formatRelativeDate(new Date(post.data.pubDate));
+          return (
+            <a
+              href={`/${post.id}`}
+              class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
+            >
+              <span style="max-width: 10rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{post.data.title}</span>
+              <span style={`font-size: 0.75rem; color: ${dateColor}; opacity: 0.65; flex-shrink: 0; margin-left: 0.25rem;`}>{relDate}</span>
+            </a>
+          );
+        })}
       </div>
     ))}
   </div>
