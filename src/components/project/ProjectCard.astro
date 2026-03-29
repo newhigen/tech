@@ -9,21 +9,20 @@ interface Props {
   period?: string;
 }
 
-const { title, slug, description, link, github, tags = [], period } = Astro.props;
+const { title, description, link, github, tags = [], period } = Astro.props;
+const domain = link ? new URL(link).hostname : null;
 ---
 
 <article class="project-card">
   <div class="card-top">
     <div class="title-row">
-      <a href={`/projects/${slug}`} class="title-link">
-        <h2 class="title">{title}</h2>
-      </a>
+      <h2 class="title">
+        {title}
+        {domain && <span class="domain">· {domain}</span>}
+      </h2>
       {period && <span class="period">{period}</span>}
     </div>
     <div class="links">
-      {link && (
-        <a href={link} target="_blank" rel="noopener noreferrer" class="ext-link">Visit →</a>
-      )}
       {github && (
         <a href={github} target="_blank" rel="noopener noreferrer" class="ext-link">GitHub →</a>
       )}
@@ -69,16 +68,21 @@ const { title, slug, description, link, github, tags = [], period } = Astro.prop
     min-width: 0;
   }
 
-  .title-link {
-    text-decoration: none;
-  }
-
   .title {
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--text-primary);
     margin: 0;
+    padding: 0;
+    border: none;
     white-space: nowrap;
+  }
+
+  .domain {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin-left: 0.25rem;
   }
 
   .period {
