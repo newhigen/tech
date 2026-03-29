@@ -4,11 +4,21 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import ProjectCard from '../../components/project/ProjectCard.astro';
 
 const allProjects = await getCollection('projects');
+
+function periodToNum(p?: string) {
+  if (!p) return 0;
+  const m = p.match(/(\d{4})\.(\d{2})/);
+  return m ? parseInt(m[1]) * 100 + parseInt(m[2]) : 0;
+}
+
+const sortedProjects = [...allProjects].sort(
+  (a, b) => periodToNum(b.data.period) - periodToNum(a.data.period)
+);
 ---
 
 <PageLayout title="Projects">
-  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-    {allProjects.map(project => (
+  <div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 32rem;">
+    {sortedProjects.map(project => (
       <ProjectCard
         title={project.data.title}
         slug={project.id}
@@ -19,7 +29,7 @@ const allProjects = await getCollection('projects');
         period={project.data.period}
       />
     ))}
-    {allProjects.length === 0 && (
+    {sortedProjects.length === 0 && (
       <p style="color: var(--text-secondary);">No projects yet.</p>
     )}
   </div>
