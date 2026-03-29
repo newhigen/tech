@@ -45,11 +45,13 @@ const { title, slug, description, link, github, tags = [], period } = Astro.prop
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--code-bg);
-    transition: border-color 0.15s ease, background-color 0.15s ease;
+    opacity: 0.8;
+    transition: border-color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
   }
 
   .project-card:hover {
     border-color: var(--text-tertiary);
+    opacity: 1;
   }
 
   .card-top {
