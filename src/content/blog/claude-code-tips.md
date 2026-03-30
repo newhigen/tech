@@ -28,16 +28,19 @@ Claude Code 알림은 뜨는데 소리가 없고 밋밋했다. **peon-ping**을 
 **설치**
 
 ```bash
-curl -fsSL peonping.com/install | bash
+brew install PeonPing/tap/peon-ping
+peon-ping-setup
 ```
+
+`peon-ping-setup`을 실행하면 Claude Code hook 등록과 사운드팩 다운로드가 자동으로 진행된다.
 
 **SCV 팩으로 변경**
 
 기본은 워크래프트 피온 음성이다.
 
 ```bash
-peon packs install sc_scv
-peon --pack sc_scv
+peon-ping packs install sc_scv
+peon-ping --pack sc_scv
 ```
 
 **소리만 남기고 데스크탑 알림 끄기**
