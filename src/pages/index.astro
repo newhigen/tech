@@ -2,11 +2,22 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/blog/PostCard.astro';
+import ProjectCard from '../components/project/ProjectCard.astro';
 
 const allPosts = await getCollection('blog');
 const recentPosts = allPosts
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, 5);
+
+const allProjects = await getCollection('projects');
+function periodToNum(p?: string) {
+  if (!p) return 0;
+  const m = p.match(/(\d{4})\.(\d{2})/);
+  return m ? parseInt(m[1]) * 100 + parseInt(m[2]) : 0;
+}
+const sortedProjects = [...allProjects].sort(
+  (a, b) => periodToNum(b.data.period) - periodToNum(a.data.period)
+);
 ---
 
 <BaseLayout title="tech.sungduk">
@@ -38,6 +49,26 @@ const recentPosts = allPosts
         <a href="/tech" style="font-size: 0.875rem; color: var(--text-tertiary);">
           All →
         </a>
+      </div>
+    </section>
+
+    <section style="margin-top: 2.5rem;">
+      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+        Projects
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        {sortedProjects.map(project => (
+          <ProjectCard
+            title={project.data.title}
+            slug={project.id}
+            description={project.data.description}
+            link={project.data.link}
+            github={project.data.github}
+            tags={project.data.tags}
+            period={project.data.period}
+            icon={project.data.icon}
+          />
+        ))}
       </div>
     </section>
   </div>
