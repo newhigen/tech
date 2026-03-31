@@ -8,9 +8,10 @@ interface Props {
   tags?: string[];
   period?: string;
   icon?: string;
+  compact?: boolean;
 }
 
-const { title, slug, description, link, github, tags = [], period, icon } = Astro.props;
+const { title, slug, description, link, github, tags = [], period, icon, compact = false } = Astro.props;
 const domain = link ? new URL(link).hostname : null;
 const href = `/projects/${slug}`;
 
@@ -29,28 +30,37 @@ function calcDuration(p?: string) {
 const duration = calcDuration(period);
 ---
 
-<article class="project-card" data-href={href}>
-  <div class="card-content">
-    <div class="row-top">
-      <h2 class="title">{title}</h2>
-      {period && <span class="meta">{period}{duration ? ` (${duration})` : ''}</span>}
+{compact ? (
+  <a class="project-compact" href={href}>
+    {icon && <span class="compact-icon">{icon}</span>}
+    <span class="compact-title">{title}</span>
+    <span class="compact-sep">—</span>
+    <span class="compact-desc">{description}</span>
+  </a>
+) : (
+  <article class="project-card" data-href={href}>
+    <div class="card-content">
+      <div class="row-top">
+        <h2 class="title">{title}</h2>
+        {period && <span class="meta">{period}{duration ? ` (${duration})` : ''}</span>}
+      </div>
+      <p class="description">{description}</p>
+      <div class="row-bottom">
+        {domain && <span class="domain">{icon && <span class="icon">{icon}</span>}{domain}</span>}
+        {tags.map(tag => <span class="tag">{tag}</span>)}
+        {github && (
+          <a href={github} target="_blank" rel="noopener noreferrer" class="github-link">GitHub →</a>
+        )}
+      </div>
     </div>
-    <p class="description">{description}</p>
-    <div class="row-bottom">
-      {domain && <span class="domain">{icon && <span class="icon">{icon}</span>}{domain}</span>}
-      {tags.map(tag => <span class="tag">{tag}</span>)}
-      {github && (
-        <a href={github} target="_blank" rel="noopener noreferrer" class="github-link">GitHub →</a>
-      )}
+    <div class="arrow" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line class="arrow-line" x1="2" y1="12" x2="19" y2="12" />
+        <polyline class="arrow-head" points="13 6 19 12 13 18" />
+      </svg>
     </div>
-  </div>
-  <div class="arrow" aria-hidden="true">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <line class="arrow-line" x1="2" y1="12" x2="19" y2="12" />
-      <polyline class="arrow-head" points="13 6 19 12 13 18" />
-    </svg>
-  </div>
-</article>
+  </article>
+)}
 
 <script>
   import { navigate } from 'astro:transitions/client';
@@ -64,6 +74,43 @@ const duration = calcDuration(period);
 </script>
 
 <style>
+  .project-compact {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .project-compact:hover {
+    opacity: 0.65;
+  }
+
+  .compact-icon {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .compact-title {
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .compact-sep {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .compact-desc {
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .project-card {
     display: flex;
     align-items: center;
