@@ -2,14 +2,14 @@
 import PageLayout from '../layouts/PageLayout.astro';
 
 function calcDuration(startStr: string, endStr?: string): string {
-  const [sy, sm] = startStr.split('.').map(Number);
+  const [sy, sm] = startStr.split('.').map(s => Number(s.trim()));
   let ey: number, em: number;
   if (!endStr) {
     const now = new Date();
     ey = now.getFullYear();
     em = now.getMonth() + 1;
   } else {
-    [ey, em] = endStr.split('.').map(Number);
+    [ey, em] = endStr.split('.').map(s => Number(s.trim()));
   }
   const months = (ey - sy) * 12 + (em - sm) + 1;
   const years = Math.floor(months / 12);
@@ -19,8 +19,8 @@ function calcDuration(startStr: string, endStr?: string): string {
   return `${years}년 ${rem}개월`;
 }
 
-const vunoDuration = calcDuration('2022.3');
-const koreDuration = calcDuration('2019.6', '2022.2');
+const vunoDuration = calcDuration('2022. 3');
+const koreDuration = calcDuration('2019. 6', '2022. 2');
 ---
 
 <PageLayout title="Resume" description="조성덕 이력서">
@@ -42,7 +42,7 @@ const koreDuration = calcDuration('2019.6', '2022.2');
         <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: baseline;">
           <span style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">ML Engineer</span>
           <span style="font-size: 0.875rem; color: var(--text-secondary);">뷰노</span>
-          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2022.3 – 현재 ({vunoDuration})</span>
+          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2022. 3 – 현재 ({vunoDuration})</span>
         </div>
         <p style="font-size: 0.875rem; color: var(--text-tertiary); margin: 0.25rem 0 0;">흉부 X-ray · 폐 CT · 디지털 병리 진단 AI 제품 연구개발</p>
       </div>
@@ -51,7 +51,7 @@ const koreDuration = calcDuration('2019.6', '2022.2');
         <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: baseline;">
           <span style="font-size: 0.9375rem; font-weight: 600; color: var(--text-primary);">Research Assistant</span>
           <span style="font-size: 0.875rem; color: var(--text-secondary);">고려대 고성능비주얼컴퓨팅 연구실</span>
-          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2019.6 – 2022.2 ({koreDuration})</span>
+          <span style="font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap;">2019. 6 – 2022. 2 ({koreDuration})</span>
         </div>
         <p style="font-size: 0.875rem; color: var(--text-tertiary); margin: 0.25rem 0 0;">딥러닝 기반 의료 영상 처리 연구 및 국제 챌린지 주최</p>
       </div>
