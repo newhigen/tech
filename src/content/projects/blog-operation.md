@@ -12,10 +12,10 @@ icon: "¶"
 
 ## 스택
 
-두 블로그 모두 [Astro](https://astro.build)로 구성했다. Jekyll, Hugo, Notion, Obsidian Publish 등을 검토했으나 컴포넌트 단위 커스터마이징과 Claude Code와의 작업 흐름을 고려해 Astro를 선택했다.
+두 블로그 모두 [Astro](https://astro.build)로 구성되어 있다. Jekyll, Hugo, Notion, Obsidian Publish 등을 검토했으나 컴포넌트 단위 커스터마이징과 Claude Code와의 작업 흐름을 고려해 Astro를 선택했다.
 
 - **글쓰기 블로그**: Cloudflare Pages 배포. 콘텐츠는 Obsidian에서 작성 후 Obsidian Sync로 동기화한다.
-- **기술 블로그**: GitHub Pages 배포. 기술 포스팅과 프로젝트 소개.
+- **기술 블로그**: GitHub Pages 배포. 기술 포스팅과 프로젝트 소개를 올린다.
 
 코드 수정은 Claude Code로 처리한다.
 
