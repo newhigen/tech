@@ -8,14 +8,17 @@ period: "2025.07 –"
 icon: "¶"
 ---
 
-글쓰기 블로그 [sungd.uk](https://sungd.uk)와 기술 블로그 [tech.sungd.uk](https://tech.sungd.uk)를 각각 운영한다.
+## 블로그
+
+- **[sungd.uk](https://sungd.uk)**: 생각, 독서, 일상에 대한 글을 올린다. 서정적인 문체로 짧게 쓴다.
+- **[tech.sungd.uk](https://tech.sungd.uk)**: ML, 개발 환경, 도구에 대한 글을 올린다. 간결하고 실용적인 문체로 쓴다.
 
 ## 스택
 
 두 블로그 모두 [Astro](https://astro.build)로 구성되어 있다. Jekyll, Hugo, Notion, Obsidian Publish 등을 검토했으나 빠르고 마음에 드는 템플릿이 있어 Astro를 선택했다.
 
 - **글쓰기 블로그**: Cloudflare Pages 배포. 콘텐츠는 Obsidian에서 작성 후 Obsidian Sync로 동기화한다.
-- **기술 블로그**: GitHub Pages 배포. 기술 포스팅과 프로젝트 소개를 올린다.
+- **기술 블로그**: GitHub Pages 배포.
 
 코드 수정은 Claude Code로 처리한다.
 
