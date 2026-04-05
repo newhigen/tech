@@ -26,15 +26,15 @@ icon: "¶"
 
 `<mark>`나 `<sup>` 같은 HTML 태그를 자주 쓴다. 매번 직접 입력하는 것이 번거롭다. Templater 플러그인을 쓰면 텍스트를 선택하고 단축키 하나로 처리할 수 있다.
 
-**1. Templater 설치**
+#### 1. Templater 설치
 
 Settings → Community plugins → Templater 설치 후 활성화
 
-**2. 템플릿 폴더 지정**
+#### 2. 템플릿 폴더 지정
 
 Settings → Templater → Template folder location에 `Templates` 입력
 
-**3. 템플릿 파일 생성**
+#### 3. 템플릿 파일 생성
 
 `Templates/wrap-mark.md`
 ```
@@ -46,7 +46,7 @@ Settings → Templater → Template folder location에 `Templates` 입력
 <%* tR += `<sup>${tp.file.selection()}</sup>` %>
 ```
 
-**4. 단축키 지정**
+#### 4. 단축키 지정
 
 Settings → Templater → Template Hotkeys → `+`
 - `wrap-mark.md` → `⌘⇧M`
