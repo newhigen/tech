@@ -23,18 +23,18 @@ article h2 {
 
 article h3 {
   font-size: 1.0625rem;
-  margin: 1.5rem 0 0.5rem;
+  margin: 1.75rem 0 0.625rem;
 }
 
 article h4 {
   font-size: 0.9375rem;
   font-weight: 600;
-  margin: 1rem 0 0.5rem;
-  color: var(--text-secondary);
+  margin: 1.25rem 0 0.625rem;
+  color: var(--text-primary);
 }
 
 article p {
-  color: var(--text-secondary);
+  color: rgba(0, 0, 0, 0.65);
   line-height: 1.8;
   margin: 0 0 0.75rem;
   font-size: 0.9375rem;
@@ -64,7 +64,7 @@ article em {
 
 article ul,
 article ol {
-  color: var(--text-secondary);
+  color: rgba(0, 0, 0, 0.65);
   font-size: 0.9375rem;
   line-height: 1.6;
   margin: 0.15rem 0 0.4rem;
@@ -185,4 +185,10 @@ article th {
 article td {
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border);
+}
+
+html.dark article p,
+html.dark article ul,
+html.dark article ol {
+  color: rgba(255, 255, 255, 0.65);
 }
