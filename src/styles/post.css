@@ -85,7 +85,8 @@ article ol {
 }
 
 article li {
-  margin-bottom: 0.15rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 article li > ul,
