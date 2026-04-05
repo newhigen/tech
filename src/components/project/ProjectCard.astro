@@ -5,6 +5,7 @@ interface Props {
   description: string;
   link?: string;
   link2?: string;
+  icon2?: string;
   github?: string;
   tags?: string[];
   period?: string;
@@ -12,7 +13,7 @@ interface Props {
   compact?: boolean;
 }
 
-const { title, slug, description, link, link2, github, tags = [], period, icon, compact = false } = Astro.props;
+const { title, slug, description, link, link2, icon2, github, tags = [], period, icon, compact = false } = Astro.props;
 const domain = link ? new URL(link).hostname : null;
 const domain2 = link2 ? new URL(link2).hostname : null;
 const href = `/projects/${slug}`;
@@ -49,7 +50,7 @@ const duration = calcDuration(period);
       <p class="description">{description}</p>
       <div class="row-bottom">
         {domain && <span class="domain">{icon && <span class="icon">{icon}</span>}{domain}</span>}
-        {domain2 && <span class="domain">{domain2}</span>}
+        {domain2 && <span class="domain">{icon2 && <span class="icon">{icon2}</span>}{domain2}</span>}
         {tags.map(tag => <span class="tag">{tag}</span>)}
         {github && (
           <a href={github} target="_blank" rel="noopener noreferrer" class="github-link">GitHub →</a>

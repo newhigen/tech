@@ -3,6 +3,7 @@ title: 블로그 운영
 description: Astro 기반 블로그 두 개를 직접 개발하고 운영한다. 글쓰기 블로그(sungd.uk)와 기술 블로그(tech.sungd.uk).
 link: https://sungd.uk
 link2: https://tech.sungd.uk
+icon2: "⌥"
 tags: [Astro]
 period: "2025.07 –"
 icon: "¶"
