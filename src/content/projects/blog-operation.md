@@ -10,8 +10,8 @@ icon: "¶"
 
 ## 블로그
 
-- **[sungd.uk](https://sungd.uk)**: 생각, 독서, 일상에 대한 글을 올린다. 서정적인 문체로 짧게 쓴다.
-- **[tech.sungd.uk](https://tech.sungd.uk)**: ML, 개발 환경, 도구에 대한 글을 올린다. 간결하고 실용적인 문체로 쓴다.
+- **[sungd.uk](https://sungd.uk)**: 생각, 독서, 일상에 대한 글을 올린다.
+- **[tech.sungd.uk](https://tech.sungd.uk)**: ML, 개발 환경, 도구에 대한 글을 올린다.
 
 ## 스택
 
