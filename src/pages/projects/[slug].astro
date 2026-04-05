@@ -15,10 +15,10 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { Content } = await render(project);
+const { Content, headings } = await render(project);
 ---
 
-<PageLayout title={project.data.title} description={project.data.description}>
+<PageLayout title={project.data.title} description={project.data.description} headings={headings}>
   <div class="mb-6">
     {project.data.link && (
       <a href={project.data.link} target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline mr-4">
