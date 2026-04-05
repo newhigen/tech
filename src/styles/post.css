@@ -23,20 +23,20 @@ article h2 {
 
 article h3 {
   font-size: 1.0625rem;
-  margin: 1.25rem 0 0.75rem;
+  margin: 1.75rem 0 0.625rem;
 }
 
 article h4 {
   font-size: 0.9375rem;
   font-weight: 600;
-  margin: 1rem 0 0.5rem;
-  color: var(--text-secondary);
+  margin: 1.25rem 0 0.625rem;
+  color: var(--text-primary);
 }
 
 article p {
-  color: var(--text-secondary);
+  color: rgba(0, 0, 0, 0.65);
   line-height: 1.8;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.75rem;
   font-size: 0.9375rem;
 }
 
@@ -64,16 +64,16 @@ article em {
 
 article ul,
 article ol {
-  color: var(--text-secondary);
+  color: rgba(0, 0, 0, 0.65);
   font-size: 0.9375rem;
   line-height: 1.6;
-  margin: 0 0 1rem;
+  margin: 0.15rem 0 0.4rem;
   padding-left: 1.5rem;
 }
 
 article p + ul,
 article p + ol {
-  margin-top: -1rem;
+  margin-top: -0.5rem;
 }
 
 article ul {
@@ -85,7 +85,8 @@ article ol {
 }
 
 article li {
-  margin-bottom: 0.15rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 article li > ul,
@@ -113,7 +114,7 @@ article hr {
 }
 
 article pre {
-  margin: 1.25rem 0;
+  margin: 0.75rem 0;
   padding: 1.125rem 1.375rem;
   border-radius: 8px;
   font-size: 0.8125rem;
@@ -184,4 +185,10 @@ article th {
 article td {
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border);
+}
+
+html.dark article p,
+html.dark article ul,
+html.dark article ol {
+  color: rgba(255, 255, 255, 0.65);
 }

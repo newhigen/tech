@@ -1,12 +1,15 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import TOC from '../components/blog/TOC.astro';
 
 interface Props {
   title: string;
   description?: string;
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, headings = [] } = Astro.props;
+const hasTOC = headings.filter(h => h.depth >= 1 && h.depth <= 3).length > 0;
 ---
 
 <style>
@@ -24,7 +27,20 @@ const { title, description } = Astro.props;
   .page-content {
     flex: 1;
     min-width: 0;
-    padding: 0 2rem;
+    padding: 0 1.25rem;
+  }
+  .toc-aside {
+    width: 13rem;
+    flex-shrink: 0;
+    padding-left: 1.25rem;
+  }
+  .toc-placeholder {
+    width: 13rem;
+    flex-shrink: 0;
+  }
+  @media (max-width: 1024px) {
+    .toc-aside, .toc-placeholder { display: none; }
+    .page-content { padding: 0 1rem; }
   }
   @media (max-width: 768px) {
     .page-wrap { padding: 1rem 0; }
@@ -42,5 +58,12 @@ const { title, description } = Astro.props;
         <slot />
       </div>
     </div>
+    {hasTOC ? (
+      <aside class="toc-aside">
+        <TOC headings={headings} />
+      </aside>
+    ) : (
+      <div class="toc-placeholder" />
+    )}
   </div>
 </BaseLayout>
