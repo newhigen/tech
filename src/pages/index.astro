@@ -70,9 +70,9 @@ const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
   }
 
   @media (max-width: 768px) {
-    .layout-wrapper { padding: 1rem 0; }
+    .layout-wrapper { padding: 1rem 1.25rem; }
     .sidebar-aside { display: none; }
-    .home-main { padding: 0 1.25rem; }
+    .home-main { padding: 0; max-width: 100%; }
   }
 </style>
 
