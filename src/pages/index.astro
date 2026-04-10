@@ -46,14 +46,6 @@ const sortedProjects = [...allProjects].sort(
   .home-section:first-child {
     margin-bottom: 2.5rem;
   }
-  .all-posts-list {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .all-posts-list.open {
-    max-height: 2000px;
-  }
 
   @media (max-width: 768px) {
     .layout-wrapper { padding: 1rem 0; }
@@ -77,47 +69,20 @@ const sortedProjects = [...allProjects].sort(
       </section>
 
       <section class="home-section">
-        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-          Recent Posts
-        </h2>
         <div class="post-list">
-          {recentPosts.map(post => (
-            <PostCard
-              title={post.data.title}
-              slug={post.id}
-              description={post.data.description}
-              pubDate={post.data.pubDate}
-              category={post.data.category}
-              tags={post.data.tags}
-              compact
-            />
-          ))}
-        </div>
-        <div style="margin-top: 1.5rem;">
-          <button
-            id="all-posts-btn"
-            style="font-size: 0.875rem; color: var(--text-tertiary); background: none; border: none; cursor: pointer; padding: 0;"
-          >
-            All →
-          </button>
-        </div>
-
-        <div class="all-posts-list" id="all-posts-list">
-          <div style="margin-top: 1.5rem;">
-            {allPosts
-              .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
-              .map(post => (
-                <PostCard
-                  title={post.data.title}
-                  slug={post.id}
-                  description={post.data.description}
-                  pubDate={post.data.pubDate}
-                  category={post.data.category}
-                  tags={post.data.tags}
-                  compact
-                />
-              ))}
-          </div>
+          {allPosts
+            .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+            .map(post => (
+              <PostCard
+                title={post.data.title}
+                slug={post.id}
+                description={post.data.description}
+                pubDate={post.data.pubDate}
+                category={post.data.category}
+                tags={post.data.tags}
+                compact
+              />
+            ))}
         </div>
       </section>
 
@@ -145,16 +110,4 @@ const sortedProjects = [...allProjects].sort(
     </div>
   </div>
 
-  <script is:inline>
-    document.addEventListener('astro:page-load', () => {
-      const openBtn = document.getElementById('all-posts-btn');
-      const allPostsList = document.getElementById('all-posts-list');
-
-      if (!openBtn || !allPostsList) return;
-
-      openBtn.addEventListener('click', () => {
-        allPostsList.classList.toggle('open');
-      });
-    });
-  </script>
 </BaseLayout>
