@@ -45,11 +45,13 @@ const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
 
 <style>
   .layout-wrapper {
+    width: 100%;
     max-width: 72rem;
     margin: 0 auto;
     padding: 1.25rem 2rem;
     display: flex;
     gap: 0;
+    box-sizing: border-box;
   }
   .sidebar-aside {
     width: 13rem;
