@@ -135,28 +135,6 @@ const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
           ))}
         </div>
       </section>
-
-      <section class="home-section">
-        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-          Projects
-        </h2>
-        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-          {sortedProjects.map(project => (
-            <ProjectCard
-              title={project.data.title}
-              slug={project.id}
-              description={project.data.description}
-              link={project.data.link}
-              link2={project.data.link2}
-              github={project.data.github}
-              tags={project.data.tags}
-              period={project.data.period}
-              icon={project.data.icon}
-              compact
-            />
-          ))}
-        </div>
-      </section>
     </div>
   </div>
 
