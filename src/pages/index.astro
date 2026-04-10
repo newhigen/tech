@@ -46,57 +46,13 @@ const sortedProjects = [...allProjects].sort(
   .home-section:first-child {
     margin-bottom: 2.5rem;
   }
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
+  .all-posts-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .modal-overlay.open {
-    display: flex;
-  }
-  .modal-content {
-    background: var(--bg-primary);
-    border-radius: 8px;
-    padding: 2rem;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  }
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  .modal-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-close:hover {
-    color: var(--text-primary);
+  .all-posts-list.open {
+    max-height: 2000px;
   }
 
   @media (max-width: 768px) {
@@ -107,30 +63,6 @@ const sortedProjects = [...allProjects].sort(
 </style>
 
 <BaseLayout title="tech.sungduk">
-  <!-- 전체 포스트 모달 -->
-  <div class="modal-overlay" id="all-posts-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>All Posts</h2>
-        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
-      </div>
-      <div class="post-list" id="all-posts-list">
-        {allPosts
-          .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
-          .map(post => (
-            <PostCard
-              title={post.data.title}
-              slug={post.id}
-              description={post.data.description}
-              pubDate={post.data.pubDate}
-              category={post.data.category}
-              tags={post.data.tags}
-              compact
-            />
-          ))}
-      </div>
-    </div>
-  </div>
 
   <div class="layout-wrapper">
     <aside class="sidebar-aside">
@@ -169,6 +101,24 @@ const sortedProjects = [...allProjects].sort(
             All →
           </button>
         </div>
+
+        <div class="all-posts-list" id="all-posts-list">
+          <div style="margin-top: 1.5rem;">
+            {allPosts
+              .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+              .map(post => (
+                <PostCard
+                  title={post.data.title}
+                  slug={post.id}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate}
+                  category={post.data.category}
+                  tags={post.data.tags}
+                  compact
+                />
+              ))}
+          </div>
+        </div>
       </section>
 
       <section class="home-section">
@@ -197,27 +147,13 @@ const sortedProjects = [...allProjects].sort(
 
   <script is:inline>
     document.addEventListener('astro:page-load', () => {
-      const modal = document.getElementById('all-posts-modal');
       const openBtn = document.getElementById('all-posts-btn');
-      const closeBtn = document.getElementById('modal-close');
+      const allPostsList = document.getElementById('all-posts-list');
 
-      if (!modal || !openBtn || !closeBtn) return;
+      if (!openBtn || !allPostsList) return;
 
       openBtn.addEventListener('click', () => {
-        modal.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      });
-
-      closeBtn.addEventListener('click', () => {
-        modal.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.classList.remove('open');
-          document.body.style.overflow = '';
-        }
+        allPostsList.classList.toggle('open');
       });
     });
   </script>
