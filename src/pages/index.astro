@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/layout/Sidebar.astro';
 import PostCard from '../components/blog/PostCard.astro';
 import ProjectCard from '../components/project/ProjectCard.astro';
 
@@ -20,58 +21,204 @@ const sortedProjects = [...allProjects].sort(
 );
 ---
 
+<style>
+  .layout-wrapper {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    gap: 0;
+  }
+  .sidebar-aside {
+    width: 13rem;
+    flex-shrink: 0;
+    padding-right: 1rem;
+  }
+  .home-main {
+    flex: 1;
+    min-width: 0;
+    max-width: 52rem;
+    padding: 0 1.25rem;
+  }
+  .home-section {
+    margin-bottom: 2.5rem;
+  }
+  .home-section:first-child {
+    margin-bottom: 2.5rem;
+  }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open {
+    display: flex;
+  }
+  .modal-content {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .layout-wrapper { padding: 1rem 0; }
+    .sidebar-aside { display: none; }
+    .home-main { padding: 0 1.25rem; }
+  }
+</style>
+
 <BaseLayout title="tech.sungduk">
-  <div style="max-width: 52rem; margin: 0 auto; padding: 2.5rem 2rem;" class="home-wrap">
-    <section style="margin-bottom: 2.5rem;">
-      <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0;">
-        기술에 대해 쓰고 기록합니다.
-      </p>
-    </section>
-
-    <section>
-      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-        Recent Posts
-      </h2>
-      <div class="post-list">
-        {recentPosts.map(post => (
-          <PostCard
-            title={post.data.title}
-            slug={post.id}
-            description={post.data.description}
-            pubDate={post.data.pubDate}
-            category={post.data.category}
-            tags={post.data.tags}
-            compact
-          />
-        ))}
+  <!-- 전체 포스트 모달 -->
+  <div class="modal-overlay" id="all-posts-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>All Posts</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
       </div>
-      <div style="margin-top: 1.5rem;">
-        <a href="/tech" style="font-size: 0.875rem; color: var(--text-tertiary);">
-          All →
-        </a>
+      <div class="post-list" id="all-posts-list">
+        {allPosts
+          .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+          .map(post => (
+            <PostCard
+              title={post.data.title}
+              slug={post.id}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              tags={post.data.tags}
+              compact
+            />
+          ))}
       </div>
-    </section>
-
-    <section style="margin-top: 2.5rem;">
-      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-        Projects
-      </h2>
-      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-        {sortedProjects.map(project => (
-          <ProjectCard
-            title={project.data.title}
-            slug={project.id}
-            description={project.data.description}
-            link={project.data.link}
-            link2={project.data.link2}
-            github={project.data.github}
-            tags={project.data.tags}
-            period={project.data.period}
-            icon={project.data.icon}
-            compact
-          />
-        ))}
-      </div>
-    </section>
+    </div>
   </div>
+
+  <div class="layout-wrapper">
+    <aside class="sidebar-aside">
+      <Sidebar />
+    </aside>
+
+    <div class="home-main">
+      <section class="home-section">
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0;">
+          기술에 대해 쓰고 기록합니다.
+        </p>
+      </section>
+
+      <section class="home-section">
+        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+          Recent Posts
+        </h2>
+        <div class="post-list">
+          {recentPosts.map(post => (
+            <PostCard
+              title={post.data.title}
+              slug={post.id}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              tags={post.data.tags}
+              compact
+            />
+          ))}
+        </div>
+        <div style="margin-top: 1.5rem;">
+          <button
+            id="all-posts-btn"
+            style="font-size: 0.875rem; color: var(--text-tertiary); background: none; border: none; cursor: pointer; padding: 0;"
+          >
+            All →
+          </button>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+          Projects
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {sortedProjects.map(project => (
+            <ProjectCard
+              title={project.data.title}
+              slug={project.id}
+              description={project.data.description}
+              link={project.data.link}
+              link2={project.data.link2}
+              github={project.data.github}
+              tags={project.data.tags}
+              period={project.data.period}
+              icon={project.data.icon}
+              compact
+            />
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      const modal = document.getElementById('all-posts-modal');
+      const openBtn = document.getElementById('all-posts-btn');
+      const closeBtn = document.getElementById('modal-close');
+
+      if (!modal || !openBtn || !closeBtn) return;
+
+      openBtn.addEventListener('click', () => {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+  </script>
 </BaseLayout>
