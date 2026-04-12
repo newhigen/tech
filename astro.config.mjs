@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import rehypeMermaid from 'rehype-mermaid';
-import rehypeBlogHide from './src/plugins/rehype-blog-hide.js';
+import remarkBlogHide from './src/plugins/rehype-blog-hide.js';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +15,8 @@ export default defineConfig({
   },
   integrations: [mdx(), sitemap()],
   markdown: {
-    rehypePlugins: [rehypeBlogHide, rehypeMermaid],
+    remarkPlugins: [remarkBlogHide],
+    rehypePlugins: [rehypeMermaid],
     shikiConfig: {
       themes: {
         light: 'github-light',
