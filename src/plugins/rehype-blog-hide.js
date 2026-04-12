@@ -1,34 +1,28 @@
-import { visit } from 'unist-util-visit';
-
-export default function remarkBlogHide() {
+export default function rehypeBlogHide() {
   return (tree) => {
     const nodesToRemove = [];
-    let inHideBlock = false;
+    let hideStart = -1;
 
-    visit(tree, (node, index, parent) => {
-      // Check for HTML comment nodes
-      if (node.type === 'html' && typeof node.value === 'string') {
-        if (node.value.includes('blog-hide-start')) {
-          inHideBlock = true;
-          nodesToRemove.push({ parent, index });
-          return;
-        } else if (node.value.includes('blog-hide-end')) {
-          inHideBlock = false;
-          nodesToRemove.push({ parent, index });
-          return;
+    // Find all comment nodes and content between hide markers
+    for (let i = 0; i < tree.children.length; i++) {
+      const node = tree.children[i];
+
+      if (node.type === 'comment' && node.value.includes('blog-hide-start')) {
+        hideStart = i;
+      } else if (node.type === 'comment' && node.value.includes('blog-hide-end') && hideStart !== -1) {
+        // Remove from hideStart to current index (inclusive)
+        for (let j = i; j >= hideStart; j--) {
+          nodesToRemove.push(j);
         }
+        hideStart = -1;
       }
+    }
 
-      if (inHideBlock) {
-        nodesToRemove.push({ parent, index });
-      }
-    });
-
-    // Remove in reverse order to maintain indices
-    nodesToRemove.reverse().forEach(({ parent, index }) => {
-      if (parent?.children && index !== undefined) {
-        parent.children.splice(index, 1);
-      }
+    // Remove nodes in reverse order to maintain indices
+    nodesToRemove.sort((a, b) => b - a);
+    const uniqueIndices = [...new Set(nodesToRemove)];
+    uniqueIndices.forEach(index => {
+      tree.children.splice(index, 1);
     });
   };
 }
