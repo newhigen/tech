@@ -101,78 +101,6 @@ function formatRelativeDate(date: Date): { text: string; color: string } {
 
 <BaseLayout title={title} description={description}>
 
-  <!-- 드로워 오버레이 -->
-  <div class="drawer-overlay" id="drawer-overlay"></div>
-
-  <!-- 드로워 패널 -->
-  <div class="drawer-panel" id="drawer-panel">
-    <div class="drawer-header">
-      <span class="drawer-title">Categories</span>
-      <button class="drawer-close" id="drawer-close" aria-label="Close">✕</button>
-    </div>
-    {categories.map(cat => {
-      const isOpen = activeCategory === cat;
-      const catId = cat.replace(/\s+/g, '-').toLowerCase();
-      return (
-        <div key={catId} style="margin-bottom: 0.375rem;">
-          <button
-            data-drawer-cat-toggle={catId}
-            aria-expanded={String(isOpen)}
-            style={`
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              width: 100%;
-              padding: 0.375rem 0.25rem;
-              border: none;
-              background: none;
-              cursor: pointer;
-              font-size: 0.8125rem;
-              font-weight: 500;
-              color: var(--text-secondary);
-              text-align: left;
-            `}
-          >
-            {cat}
-            <svg
-              data-drawer-cat-arrow={catId}
-              width="10" height="10" viewBox="0 0 10 10" fill="currentColor"
-              style={`transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(${isOpen ? '90deg' : '0deg'}); opacity: 0.5; flex-shrink: 0;`}
-            >
-              <path d="M3 2l4 3-4 3V2z"/>
-            </svg>
-          </button>
-
-          <div
-            id={`drawer-cat-${catId}`}
-            style={`list-style: none; margin: 0; padding: 0 0 0 0.5rem; overflow: hidden; max-height: ${isOpen ? '600px' : '0'}; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);`}
-          >
-            {grouped[cat].map(post => {
-              const { text: relDate, color: dateColor } = formatRelativeDate(new Date(post.data.pubDate));
-              return (
-                <a
-                  href={`/${post.id}`}
-                  class={`drawer-post-link${currentSlug === post.id ? ' active-post' : ''}`}
-                >
-                  <span style="max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{post.data.title}</span>
-                  <span style={`font-size: 0.75rem; color: ${dateColor}; opacity: 0.65; flex-shrink: 0; margin-left: 0.25rem;`}>{relDate}</span>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-
-  <!-- 모바일 드로워 트리거 -->
-  <div class="drawer-trigger">
-    <button id="drawer-open" aria-label="Open navigation" style="background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; color: var(--text-secondary); padding: 0.3rem 0.625rem; display: flex; align-items: center; gap: 0.375rem; transition: border-color 0.15s ease, color 0.15s ease;">
-      <span style="font-size: 0.8125rem;">›</span>
-      <span style="font-size: 0.8125rem;">{activeCategory ?? 'Categories'}</span>
-    </button>
-  </div>
-
   <div class="layout-wrapper">
     <aside class="sidebar-aside">
       <Sidebar currentSlug={currentSlug} />
@@ -193,49 +121,6 @@ function formatRelativeDate(date: Date): { text: string; color: string } {
 
 </BaseLayout>
 
-<script is:inline>
-  function initDrawer() {
-    const openBtn = document.getElementById('drawer-open');
-    const closeBtn = document.getElementById('drawer-close');
-    const overlay = document.getElementById('drawer-overlay');
-    const panel = document.getElementById('drawer-panel');
-    if (!openBtn || !closeBtn || !overlay || !panel) return;
-
-    function openDrawer() {
-      panel.classList.add('open');
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeDrawer() {
-      panel.classList.remove('open');
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    openBtn.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
-    overlay.addEventListener('click', closeDrawer);
-
-    // Category toggle functionality
-    const catToggles = panel.querySelectorAll('[data-drawer-cat-toggle]');
-    catToggles.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const catId = btn.getAttribute('data-drawer-cat-toggle');
-        const catContent = document.getElementById(`drawer-cat-${catId}`);
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-        btn.setAttribute('aria-expanded', !isOpen);
-        catContent.style.maxHeight = !isOpen ? '600px' : '0';
-
-        const arrow = document.querySelector(`[data-drawer-cat-arrow="${catId}"]`);
-        if (arrow) {
-          arrow.style.transform = !isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
-        }
-      });
-    });
-  }
-  document.addEventListener('astro:page-load', initDrawer);
-</script>
 
 <script>
   import mermaid from 'mermaid';

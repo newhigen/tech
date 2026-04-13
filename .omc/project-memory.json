@@ -1,0 +1,183 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1775979952748,
+  "projectRoot": "/Users/newhigen/dev/newhigen.github.io",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=22.12.0",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "astro",
+        "version": "6.1.1",
+        "category": "fullstack"
+      },
+      {
+        "name": "playwright",
+        "version": "1.59.1",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": "Node.js 22.12.0"
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "dev": "astro dev",
+      "build": "astro build",
+      "preview": "astro preview",
+      "astro": "astro"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 5,
+      "lastAccessed": 1775979952742,
+      "keyFiles": [
+        "CNAME",
+        "favicon.ico",
+        "favicon.svg",
+        "index.html"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 4,
+      "lastAccessed": 1775979952742,
+      "keyFiles": [
+        "CNAME",
+        "favicon.ico",
+        "favicon.svg",
+        "robots.txt"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1775979952744,
+      "keyFiles": [
+        "content.config.ts"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 0,
+      "lastAccessed": 1775979952744,
+      "keyFiles": []
+    },
+    "src/pages": {
+      "path": "src/pages",
+      "purpose": "Page components",
+      "fileCount": 4,
+      "lastAccessed": 1775979952745,
+      "keyFiles": [
+        "[slug].astro",
+        "about.astro",
+        "index.astro"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/layouts/BlogLayout.astro",
+      "accessCount": 4,
+      "lastAccessed": 1776083681248,
+      "type": "file"
+    },
+    {
+      "path": "astro.config.mjs",
+      "accessCount": 3,
+      "lastAccessed": 1776083260049,
+      "type": "file"
+    },
+    {
+      "path": "src/plugins/remark-blog-hide.js",
+      "accessCount": 3,
+      "lastAccessed": 1776083329068,
+      "type": "file"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "accessCount": 3,
+      "lastAccessed": 1776083561084,
+      "type": "file"
+    },
+    {
+      "path": "src/content.config.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776083124951,
+      "type": "file"
+    },
+    {
+      "path": "src/content/blog/Claude Code Anatomy.md",
+      "accessCount": 2,
+      "lastAccessed": 1776083315713,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/[slug].astro",
+      "accessCount": 1,
+      "lastAccessed": 1776083094529,
+      "type": "file"
+    },
+    {
+      "path": "src/plugins/rehype-blog-hide.js",
+      "accessCount": 1,
+      "lastAccessed": 1776083246801,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "accessCount": 1,
+      "lastAccessed": 1776083532684,
+      "type": "file"
+    },
+    {
+      "path": "src/styles/global.css",
+      "accessCount": 1,
+      "lastAccessed": 1776083564567,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
