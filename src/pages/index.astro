@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/layout/Sidebar.astro';
 import PostCard from '../components/blog/PostCard.astro';
 import ProjectCard from '../components/project/ProjectCard.astro';
 
@@ -8,6 +9,9 @@ const allPosts = await getCollection('blog');
 const recentPosts = allPosts
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, 5);
+const sorted = allPosts.sort(
+  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
 
 const allProjects = await getCollection('projects');
 function periodToNum(p?: string) {
@@ -18,60 +22,122 @@ function periodToNum(p?: string) {
 const sortedProjects = [...allProjects].sort(
   (a, b) => periodToNum(b.data.period) - periodToNum(a.data.period)
 );
+
+function formatRelativeDate(date: Date): { text: string; color: string } {
+  const now = new Date();
+  const diffMs = now.getTime() - new Date(date).getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 1) return { text: '오늘', color: 'rgb(217, 119, 6)' };
+  if (diffDays < 7) return { text: `${diffDays}일 전`, color: 'rgb(192, 132, 16)' };
+  if (diffDays < 31) return { text: `${Math.floor(diffDays / 7)}주 전`, color: 'rgb(120, 113, 108)' };
+  if (diffDays < 365) return { text: `${Math.floor(diffDays / 30)}달 전`, color: 'rgb(107, 114, 128)' };
+  return { text: `${Math.floor(diffDays / 365)}년 전`, color: 'rgb(100, 116, 139)' };
+}
+
+const grouped = sorted.reduce<Record<string, typeof allPosts>>((acc, post) => {
+  const cat = post.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(post);
+  return acc;
+}, {});
 ---
 
+<style>
+  .layout-wrapper {
+    width: 100%;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    gap: 0;
+    box-sizing: border-box;
+  }
+  .sidebar-aside {
+    width: 13rem;
+    flex-shrink: 0;
+    padding-right: 1rem;
+  }
+  .home-main {
+    flex: 1;
+    min-width: 0;
+    max-width: 52rem;
+    padding: 0 1.25rem;
+  }
+  .home-section {
+    margin-bottom: 2.5rem;
+  }
+  .home-section:first-child {
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .layout-wrapper { padding: 1rem 1.25rem; }
+    .sidebar-aside { display: none; }
+    .home-main { padding: 0; max-width: 100%; }
+  }
+</style>
+
 <BaseLayout title="tech.sungduk">
-  <div style="max-width: 52rem; margin: 0 auto; padding: 2.5rem 2rem;" class="home-wrap">
-    <section style="margin-bottom: 2.5rem;">
-      <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0;">
-        기술에 대해 쓰고 기록합니다.
-      </p>
-    </section>
 
-    <section>
-      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-        Recent Posts
-      </h2>
-      <div class="post-list">
-        {recentPosts.map(post => (
-          <PostCard
-            title={post.data.title}
-            slug={post.id}
-            description={post.data.description}
-            pubDate={post.data.pubDate}
-            category={post.data.category}
-            tags={post.data.tags}
-            compact
-          />
-        ))}
-      </div>
-      <div style="margin-top: 1.5rem;">
-        <a href="/tech" style="font-size: 0.875rem; color: var(--text-tertiary);">
-          All →
-        </a>
-      </div>
-    </section>
+  <div class="layout-wrapper">
+    <aside class="sidebar-aside">
+      <Sidebar />
+    </aside>
 
-    <section style="margin-top: 2.5rem;">
-      <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
-        Projects
-      </h2>
-      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-        {sortedProjects.map(project => (
-          <ProjectCard
-            title={project.data.title}
-            slug={project.id}
-            description={project.data.description}
-            link={project.data.link}
-            link2={project.data.link2}
-            github={project.data.github}
-            tags={project.data.tags}
-            period={project.data.period}
-            icon={project.data.icon}
-            compact
-          />
-        ))}
-      </div>
-    </section>
+    <div class="home-main">
+      <section class="home-section">
+        <p style="font-size: 0.9375rem; color: var(--text-secondary); margin: 0;">
+          기술에 대해 쓰고 기록합니다.
+        </p>
+      </section>
+
+      <section class="home-section">
+        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+          Recent Posts
+        </h2>
+        <div class="post-list">
+          {recentPosts.map(post => (
+            <PostCard
+              title={post.data.title}
+              slug={post.id}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              tags={post.data.tags}
+              compact
+            />
+          ))}
+        </div>
+        <div style="margin-top: 1.5rem;">
+          <a href="/posts" style="font-size: 0.875rem; color: var(--text-tertiary);">
+            All →
+          </a>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+          Projects
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {sortedProjects.map(project => (
+            <ProjectCard
+              title={project.data.title}
+              slug={project.id}
+              description={project.data.description}
+              link={project.data.link}
+              link2={project.data.link2}
+              github={project.data.github}
+              tags={project.data.tags}
+              period={project.data.period}
+              icon={project.data.icon}
+              compact
+            />
+          ))}
+        </div>
+      </section>
+    </div>
   </div>
+
 </BaseLayout>

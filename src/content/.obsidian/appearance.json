@@ -1,1 +1,6 @@
-{}
+{
+  "showRibbon": false,
+  "textFontFamily": "Google Sans,Pretendard Variable,LINE Seed Sans KR,Asta Sans",
+  "cssTheme": "Atom",
+  "monospaceFontFamily": "Google Sans Code"
+}
